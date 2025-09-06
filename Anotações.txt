@@ -1,0 +1,4 @@
+Fazer interface
+Fazer classes AgendaList e AgendaMap
+Fazer requisitos funcionais (inclui fazer controladores)
+Fazer testes unitários

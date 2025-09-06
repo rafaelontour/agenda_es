@@ -1,27 +1,36 @@
 package com.engenharia_software.agenda.Factory;
 
-public class FabricaAgenda {
+import com.engenharia_software.agenda.interfaces.IAgenda;
+import com.engenharia_software.agenda.model.AgendaList;
+import com.engenharia_software.agenda.model.AgendaMap;
 
-    public static final int AGENDAMAP = 0;
-    public static final int AGENDALIST = 1;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class FabricaAgenda {
 
     private static FabricaAgenda fabricaAgenda = new FabricaAgenda();
 
-    private FabricaAgenda() {
-
-    }
+    private FabricaAgenda() {}
 
     public static FabricaAgenda getInstancia() {
-        return instancia;
+        return fabricaAgenda;
     }
 
-    public IAgenda criarAgenda(int tipo) {
-        if (tipo == AGENDALIST) {
-            return new AgendaList();
-        } else if (tipo == AGENDAMAP) {
-            return new AgendaMap();
+    public IAgenda criarAgenda(TipoAgenda tipo) {
+        switch(tipo) {
+            case TipoAgenda.LIST: return new AgendaList();
+            case TipoAgenda.MAP: return new AgendaMap();
+            default: throw new IllegalArgumentException("Tipo inválido: " + tipo);
         }
-        throw new IllegalArgumentException("Tipo inválido: " + tipo);
     }
-
 }
