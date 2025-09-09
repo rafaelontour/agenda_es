@@ -7,14 +7,19 @@ import java.util.Map;
 import com.engenharia_software.agenda.interfaces.IAgenda;
 import com.engenharia_software.agenda.interfaces.IContato;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AgendaMapDTO {
     
     private Map<String, IContato> agenda = new HashMap<>();
-
-    public AgendaMapDTO(Map<String, IContato> agenda) {
-        this.agenda = agenda;
-    }
-
 
     public Map<String, IContato> getAgenda() {
         return agenda;

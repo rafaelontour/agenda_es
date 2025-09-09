@@ -1,4 +1,10 @@
-Fazer interface
-Fazer classes AgendaList e AgendaMap
-Fazer requisitos funcionais (inclui fazer controladores)
+Fazer interface contato e agenda - FEITO (03/09)
+
+Fazer classes AgendaList e AgendaMap - FEITO (04/09)
+
+Fazer Docker compose com banco - FEITO (05/09)
+
+Fazer requisitos funcionais (inclui fazer controladores, classes de serviço e repositório) 
+- RF 01 e RF 04: GET, POST de contato com validação - (FEITO 08/09)
+
 Fazer testes unitários

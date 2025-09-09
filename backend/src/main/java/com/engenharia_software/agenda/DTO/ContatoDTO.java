@@ -1,29 +1,24 @@
 package com.engenharia_software.agenda.DTO;
 
+import com.engenharia_software.agenda.model.Contato;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContatoDTO {
+    private Long id;
     private String nome;
     private String telefone;
 
-    public ContatoDTO(String nome, String telefone) {
-        this.nome = nome;
-        this.telefone = telefone;
+    public ContatoDTO(Contato contato) {
+        this.id = contato.getId();
+        this.nome = contato.getNome();
+        this.telefone = contato.getTelefone();
     }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    
 }

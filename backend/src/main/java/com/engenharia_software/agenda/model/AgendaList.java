@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,28 +32,29 @@ public class AgendaList implements IAgenda {
     @EqualsAndHashCode.Include
     private Long id;
     
-    private List<IContato> listaContato = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Contato> listaContato = new ArrayList<>();
 
     @Override
-    public boolean adicionarContato(IContato contato) {
+    public boolean adicionarContato(Contato contato) {
         listaContato.add(contato);
         return true;
     }
 
     @Override
-    public boolean removerContato(IContato contato) {
+    public boolean removerContato(Contato contato) {
         listaContato.remove(contato);
         return true;
     }
 
     @Override
-    public Collection<IContato> getListaAgenda() {
+    public Collection<Contato> getListaAgenda() {
         return listaContato;
     }
 
     @Override
     public String getContato(String telefone) {
-        for (IContato contato : listaContato) {
+        for (Contato contato : listaContato) {
             if (contato.getTelefone().equals(telefone)) {
                 return contato.getTelefone();
             }
