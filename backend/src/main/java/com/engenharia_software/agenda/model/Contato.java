@@ -31,4 +31,7 @@ public class Contato {
 
     @Column(nullable = false, unique = true)
     private String telefone;
+
+    @Column(nullable = true, unique = true)
+    private String email;
 }

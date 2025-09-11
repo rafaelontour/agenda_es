@@ -22,7 +22,7 @@ export default function RootLayout({
         <Toaster richColors position="top-right" toastOptions={{ duration: 2500 }} />
 
         <div className="flex h-screen">
-          <div className="flex flex-col min-w-[280px] bg-blue-300 p-4 gap-4" style={{ boxShadow: "4px 0px 6px rgba(0, 0, 0, 0.45)"}}>
+          <div className="flex flex-col min-w-[280px] z-10 bg-blue-300 p-4 gap-4" style={{ boxShadow: "4px 0px 6px rgba(0, 0, 0, 0.45)"}}>
             <h1 className="text-2xl">Minha agenda</h1>
 
             <div className="h-44 w-[75%] border-2 border-gray-500 mx-auto">
@@ -47,7 +47,7 @@ export default function RootLayout({
             <Calendario />
           </div>
 
-          <div className="w-full h-screen px-3 py-6">
+          <div className="w-full h-screen py-6 overflow-hidden">
             {children}
           </div>
         </div>

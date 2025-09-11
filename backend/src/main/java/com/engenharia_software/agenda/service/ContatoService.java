@@ -19,6 +19,12 @@ public class ContatoService {
     public ContatoService(ContatoRepository cr) {
         this.cr = cr;
     }
+
+    public List<ContatoDTO> listarContato() {
+        List<Contato> contatos = cr.findAll();
+        List<ContatoDTO> contatosDTO = contatos.stream().map(x -> new ContatoDTO(x)).toList();
+        return contatosDTO;
+    }
     
     @Transactional
     public ContatoDTO adicionarContato(ContatoDTO contato) {
@@ -31,15 +37,29 @@ public class ContatoService {
         return contatoCriadoDTO;
     }
 
+    public ContatoDTO atualizarContato(ContatoDTO contato, Long id) {
+        Contato contatoAtualizado = cr.findById(id).get();
+        contatoAtualizado.setNome(contato.getNome());
+        contatoAtualizado.setTelefone(contato.getTelefone());
+        Contato contatoAtualizadoCriado = cr.save(contatoAtualizado);
+        ContatoDTO contatoAtualizadoCriadoDTO = new ContatoDTO(contatoAtualizadoCriado);
+        return contatoAtualizadoCriadoDTO;
+    }
+
+    public boolean removerContato(Long id) {
+        if (!cr.existsById(id)) {
+            cr.deleteById(id);
+            return false;
+        }
+
+        cr.deleteById(id);
+        return true;
+    }
+
     public void localizarContato(ContatoDTO contato) {
 
     }
 
-    public List<ContatoDTO> listarContato() {
-        List<Contato> contatos = cr.findAll();
-        List<ContatoDTO> contatosDTO = contatos.stream().map(x -> new ContatoDTO(x)).toList();
-        return contatosDTO;
-    }
 
     public void Contato(ContatoDTO contato) {
 
