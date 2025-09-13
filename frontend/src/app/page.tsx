@@ -12,15 +12,20 @@ export default function Home() {
   
   const [contatos, setContatos] = useState<Contato[]>([]);
 
+  const [loading, setLoading] = useState(false);
+
   async function buscarContatos() {
+    setLoading(true);
     const resposta = await getContatosService();
 
     if (resposta === undefined) {
       toast.error('Não foi possível buscar os contatos')
+      setLoading(false);
       return
     }
 
     setContatos(resposta)
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -50,7 +55,13 @@ export default function Home() {
             )
           }
           {
-            contatos.length == 0 ? (
+            loading ? (
+              <div className="flex flex-col gap-6 items-center">
+                <p className="text-2xl text-center text-black animate-pulse">
+                  Carregando...
+                </p>
+              </div>
+            ) : contatos.length == 0 ? (
               <div className="flex flex-col gap-6 items-center">
                 <p className="text-2xl text-center text-black animate-pulse">
                   Nada por aqui ainda... Adicione um contato!
