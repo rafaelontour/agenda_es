@@ -12,7 +12,7 @@ services:
     ports:
       - "${MYSQL_PORT}:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./mysql_data:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -26,6 +26,3 @@ services:
       - "8080:80"
     depends_on:
       - mysql
-
-volumes:
-  mysql_data:

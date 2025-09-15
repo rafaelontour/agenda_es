@@ -3,20 +3,34 @@ package com.engenharia_software.agenda.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.engenharia_software.agenda.Factory.TipoAgenda;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED) // ou SINGLE_TABLE, se preferir
+@Getter
+@Setter
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Agenda {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private TipoAgenda tipo;
 
     @OneToMany(mappedBy = "agenda")
     private List<Contato> contatos = new ArrayList<>();

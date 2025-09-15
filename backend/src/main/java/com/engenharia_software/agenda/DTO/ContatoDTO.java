@@ -1,5 +1,6 @@
 package com.engenharia_software.agenda.DTO;
 
+import com.engenharia_software.agenda.Factory.TipoAgenda;
 import com.engenharia_software.agenda.model.Contato;
 
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ContatoDTO {
     private Long id;
+    private TipoAgenda tipo;
     private String nome;
     private String telefone;
 

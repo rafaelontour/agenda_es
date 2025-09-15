@@ -15,10 +15,11 @@ public class FabricaAgenda {
     }
 
     public Agenda criarAgenda(TipoAgenda tipo) {
-        switch(tipo) {
-            case TipoAgenda.LIST: return new AgendaList();
-            case TipoAgenda.MAP: return new AgendaMap();
-            default: throw new IllegalArgumentException("Tipo inválido: " + tipo);
+        System.out.println("TIPO: " + tipo);
+        if (tipo.equals(TipoAgenda.LIST)) {
+            return new AgendaList();
+        } else {
+            return new AgendaMap();
         }
     }
 }

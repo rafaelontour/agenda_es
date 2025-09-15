@@ -11,17 +11,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.engenharia_software.agenda.DTO.ContatoDTO;
-import com.engenharia_software.agenda.model.Contato;
 import com.engenharia_software.agenda.service.ContatoService;
 
 @RestController
 @RequestMapping("/contatos")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class ContatoController {
 
     private ContatoService cs;

@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Transient;
 
 
 @Entity
+@PrimaryKeyJoinColumn(name = "agenda_id") 
 public class AgendaList extends Agenda {
 
     @Transient
@@ -15,9 +17,5 @@ public class AgendaList extends Agenda {
 
     public void adicionarContato(Contato contato) {
         contatos.add(contato);
-    }
-
-    public List<Contato> getContatos() {
-        return contatos;
     }
 }
