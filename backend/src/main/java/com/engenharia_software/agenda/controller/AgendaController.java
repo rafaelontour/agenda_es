@@ -24,7 +24,7 @@ public class AgendaController {
     @PostMapping
     public ResponseEntity<AgendaDTO> criarAgenda(@RequestBody String tipo) {
         tipo = tipo.replace("\"", "");
-        System.out.println("DESGRAÇA DE AGENDA CHEGOU NO CONTROLADOR NO POST DE AGENDA: " + tipo);
+        
         AgendaDTO agenda = as.criarAgenda(TipoAgenda.valueOf(tipo));
         if (agenda != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(agenda);

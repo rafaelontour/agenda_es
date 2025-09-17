@@ -31,8 +31,6 @@ public class AgendaService {
         agendaDTO.setId(agendaSalva.getId());
         agendaDTO.setTipo(agendaSalva.getTipo());
 
-        System.out.println("AGENDA SALVA: " + agendaSalva.toString());
-
         return agendaDTO;
     }
 }

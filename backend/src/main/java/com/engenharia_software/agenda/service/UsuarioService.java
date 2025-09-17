@@ -28,6 +28,7 @@ public class UsuarioService {
         u.setNome(usuario.getNome());
         u.setEmail(usuario.getEmail());
         u.setTelefone(usuario.getTelefone());
+        u.setSenha(usuario.getSenha());
 
         Agenda agenda = FabricaAgenda.getInstancia().criarAgenda(usuario.getTipoAgenda());
 
@@ -37,8 +38,6 @@ public class UsuarioService {
         u.setAgenda(a);
 
         Usuario usuarioSalvo = ur.save(u);
-        System.out.println("USUARIO SALVO: ");
-        System.out.println(usuarioSalvo.toString());
 
         return usuarioSalvo.getId() != null;
     }

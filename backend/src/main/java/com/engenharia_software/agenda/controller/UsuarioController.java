@@ -22,9 +22,8 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<String> criarUsuario(@RequestBody UsuarioDTO usuario) {
-        System.out.println("USUARIO: " + usuario.getIdAgenda() + " - " + usuario.getNome() + " - " + usuario.getEmail() + " - " + usuario.getTelefone() + " - " + usuario.getTipoAgenda());
         boolean resposta = us.criarUsuario(usuario);
-// 
+
         if (resposta) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Usuário criado com sucesso.");
         }

@@ -13,5 +13,6 @@ public class UsuarioDTO {
     private String nome;
     private String email;
     private String telefone;
-    private TipoAgenda tipoAgenda; 
+    private TipoAgenda tipoAgenda;
+    private String senha;
 }
