@@ -5,8 +5,7 @@ export function middleware(request: NextRequest) {
   console.log("Middleware executando...");
 
   // Lê o cookie
-  const token = request.cookies.get("logadoAgenda")?.value;
-  console.log("token:", token);
+  const token = request.cookies.get("JSESSIONID")?.value;
 
   // Se não tiver token, redireciona para login
   if (!token) {

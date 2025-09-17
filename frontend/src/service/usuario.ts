@@ -1,4 +1,4 @@
-async function criarUsuarioService(nome: string, email: string, telefone: string, idAgenda: string, tipoAgenda: string): Promise<number | undefined> {
+async function criarUsuarioService(nome: string, email: string, telefone: string, idAgenda: string, tipoAgenda: string, senha: string): Promise<number | undefined> {
     try {
         const resposta = await fetch('http://localhost:8090/usuario', {
             method: "POST",
@@ -10,7 +10,8 @@ async function criarUsuarioService(nome: string, email: string, telefone: string
                 email: email,
                 telefone: telefone,
                 idAgenda: idAgenda,
-                tipoAgenda: tipoAgenda != null ? tipoAgenda : "LIST"
+                tipoAgenda: tipoAgenda != null ? tipoAgenda : "LIST",
+                senha: senha
             })
         })
 
@@ -24,6 +25,31 @@ async function criarUsuarioService(nome: string, email: string, telefone: string
     }
 }
 
+async function logar(nome: string, senha: string): Promise<number | undefined> {
+    try {
+        const resposta = await fetch('http://localhost:8090/auth/login', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                usuario: nome,
+                senha: senha
+            }),
+            credentials: "include"
+        })
+
+        if (!resposta.ok) {
+            return
+        }
+
+        return resposta.status
+    } catch(e) {
+        return
+    }
+}
+
 export {
-    criarUsuarioService
+    criarUsuarioService,
+    logar
 }

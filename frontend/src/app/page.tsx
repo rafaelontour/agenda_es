@@ -1,12 +1,10 @@
 "use client";
 
 import { Toaster } from "sonner";
-import useUsuario from "../data/hook/useUsuario";
 import CriarAgenda from "../components/agenda/CriarAgenda";
 import EntrarAgenda from "../components/agenda/EntrarAgenda";
 
 export default function Inicio({ children }: { children: React.ReactNode }) {
-  const { nome, email, telefone, dados } = useUsuario();
 
   return (
     <div>

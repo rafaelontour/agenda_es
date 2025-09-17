@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import useUsuario from "@/data/hook/useUsuario";
 import { criarAgendaService } from "@/service/agenda";
-import { criarUsuarioService } from "@/service/usuario";
+import { criarUsuarioService, logar } from "@/service/usuario";
+import { Eye, EyeClosed } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -15,32 +16,39 @@ export default function CriarAgenda() {
     const nav = useRouter();
 
     const { nome, setNome, email, setEmail, telefone, setTelefone, setDadosUsuario } = useUsuario();
+    const [senha, setSenha] = useState<string>("");
+    const [mostrarSenha, setMostrarSenha] = useState<boolean>(false);
     
     async function criarAgendaUsuario() {
         const resposta = await criarAgendaService(tipoAgenda)
-
-        console.log("AGENDA E ID", resposta?.resposta, resposta?.idAgenda)
 
         if (resposta?.resposta !== 201) {
             toast.error('Não foi possível criar a agenda')
             return
         }
 
-        const respostaUsuario = await criarUsuarioService(nome, email, telefone, resposta.idAgenda.toString(), tipoAgenda)
+        const respostaUsuario = await criarUsuarioService(nome, email, telefone, resposta.idAgenda.toString(), tipoAgenda, senha)
 
-        switch (respostaUsuario) {
-            case 201:
-                setDadosUsuario(true)
-                toast.success('Agenda criada com sucesso! Redirecionando...')
-                nav.push('/minha_agenda')
-                break;
-            case 400:
-                toast.error('Preencha todos os campos corretamente')
-                break;
-            default:
+        if (respostaUsuario == 201) {
+            setDadosUsuario(true)
+            toast.success('Agenda criada com sucesso! Redirecionando...')
+            const respostaLogar = await logar(nome, senha)
+            
+            if (respostaLogar !== 200) {
                 toast.error('Não foi possível criar o usuário')
-                break;
+                return
+            }
+            nav.push('/minha_agenda')
+            return
         }
+        
+        if (respostaUsuario == 400) {
+            toast.error('Preencha todos os campos corretamente')
+            return
+        }
+        
+        alert("RESPOSTA USUARIO: " + respostaUsuario)
+        toast.error('Não foi possível criar o usuário')
     }
 
     // Função para aplicar máscara no telefone
@@ -117,6 +125,38 @@ export default function CriarAgenda() {
                             value={telefone}
                             onChange={handleTelefoneChange}
                         />
+                    </div>
+
+                    <div className="relative flex flex-col gap-2">
+                        <label htmlFor="senha">Senha:</label>
+                        <input
+                            id="senha"
+                            placeholder="Min. 8 caracteres"
+                            className="border-2 border-gray-300 rounded-md h-11 w-full px-3"
+                            type={mostrarSenha ? "text" : "password"}
+                            value={senha}
+                            onChange={(e) => setSenha(e.target.value)}
+                        />
+
+                        {
+                            mostrarSenha ?
+                            <Eye
+                                className="
+                                    absolute hover:cursor-pointer right-4
+                                    top-[53px] transform -translate-y-1/2
+                                "
+                                onClick={() => setMostrarSenha(false)}
+                                />
+                            :
+                            <EyeClosed
+                                className="
+                                    absolute hover:cursor-pointer
+                                    right-4 top-[53px] transform -translate-y-1/2
+                                "
+                                onClick={() => setMostrarSenha(true)}
+                            />
+                        }
+
                     </div>
 
                     <div className="flex flex-col gap-2">

@@ -21,6 +21,7 @@ export default function EntrarAgenda() {
 
         toast.success('Agenda criada com sucesso! Redirecionando...')
     }
+    
     return (
         <Dialog>
             <DialogTrigger asChild>
