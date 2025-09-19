@@ -21,6 +21,7 @@ export default function CriarAgenda() {
     
     async function criarAgendaUsuario() {
         const resposta = await criarAgendaService(tipoAgenda)
+        alert(resposta);
 
         if (resposta?.resposta !== 201) {
             toast.error('Não foi possível criar a agenda')

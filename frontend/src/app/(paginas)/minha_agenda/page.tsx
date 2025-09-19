@@ -9,64 +9,76 @@ import CartaoContato from "../../../components/contato/CartaoContato";
 import TecladoAdicionarContato from "../../../components/contato/TecladoAdicionarContato";
 
 export default function Home() {
-  
   const [contatos, setContatos] = useState<Contato[]>([]);
-
   const [loading, setLoading] = useState(false);
+  const [anotacao, setAnotacao] = useState("");
 
   async function buscarContatos() {
-    setLoading(false);
+    setLoading(true);
     const resposta = await getContatosService();
 
     if (resposta === undefined) {
-      toast.error('Não foi possível buscar os contatos')
+      toast.error('Não foi possível buscar os contatos');
       setLoading(false);
-      return
+      return;
     }
 
-    setContatos(resposta)
+    setContatos(resposta);
     setLoading(false);
   }
 
   useEffect(() => {
-    buscarContatos()
-  }, [])
+    buscarContatos();
+  }, []);
+
+  function handleSalvarAnotacao() {
+    toast.success('Anotação salva!');
+    setAnotacao("");
+  }
 
   return (
-    <div className={`flex md:flex-col xl:flex-row h-screen`}>
-      <div className={`flex h-1/2 xl:h-full xl:w-full`}>
-        <div
-          className={`
-             p-10
-            gap-3 w-full ${contatos.length == 0 ? "flex justify-center" : "grid md:grid-cols-2 xl:grid-cols-3 items-start auto-rows-min"} mt-12
-          `}
-        >
-          {
-            contatos.length > 0 && (
-              <TecladoAdicionarContato
-                botaoAdicionarContato={
-                  <div className="flex w-full p-3 rounded-sm items-center gap-2 hover:cursor-pointer">
-                    <UserPlus size={18} />
-                    <p>Adicionar novo contato</p>
-                  </div>
-                }
-                buscarContatos={buscarContatos}
-              />
-            )
-          }
-          {
-            loading ? (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-amber-50">
+      {/* Cabeçalho */}
+      <header className="w-full bg-indigo-700 text-white flex items-center justify-between px-8 py-4 shadow-md fixed top-0 z-10">
+        <div className="flex items-center gap-3">
+          
+          <h1 className="text-2xl font-bold">Minha Agenda</h1>
+        </div>
+        <div className="text-lg">Olá, Usuário!</div>
+      </header>
+
+      {/* Conteúdo principal */}
+      <main className="flex flex-col xl:flex-row pt-24 px-6 gap-8">
+        {/* Lista de contatos */}
+        <section className="flex-1">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold text-indigo-900">Contatos</h2>
+            <TecladoAdicionarContato
+              botaoAdicionarContato={
+                <span
+                  className="bg-indigo-800  text-white font-semibold px-4 py-2 rounded-lg shadow flex items-center gap-2 cursor-pointer transition-all duration-200"
+                  tabIndex={0}
+                  role="button"
+                >
+                  <UserPlus size={20} />
+                  Adicionar contato
+                </span>
+              }
+              buscarContatos={buscarContatos}
+            />
+          </div>
+          <div className={`grid gap-6 ${contatos.length === 0 ? "justify-center" : "md:grid-cols-2 xl:grid-cols-3"}`}>
+            {loading ? (
               <div className="flex flex-col gap-6 items-center">
                 <p className="text-2xl text-center text-black animate-pulse">
                   Carregando...
                 </p>
               </div>
-            ) : contatos.length == 0 ? (
+            ) : contatos.length === 0 ? (
               <div className="flex flex-col gap-6 items-center">
                 <p className="text-2xl text-center text-black animate-pulse">
                   Nada por aqui ainda... Adicione um contato!
                 </p>
-                <TecladoAdicionarContato buscarContatos={buscarContatos} />
               </div>
             ) : (
               contatos.map((contato) => (
@@ -76,19 +88,28 @@ export default function Home() {
                   atualizarContatos={buscarContatos}
                 />
               ))
-            )
-          }
-        </div>
-      </div>
+            )}
+          </div>
+        </section>
 
-      <div
-        className="
-          md:bg-red-400 lg:bg-green-400 p-10
-          h-1/2 xl:mt-12 xl:h-full xl:w-[40%]
-        "
-      >
-        sadlkasdfjf
-      </div>
+        {/* Anotações */}
+        <aside className="xl:w-[35%] bg-white rounded-xl shadow-lg p-8 flex flex-col gap-4 h-fit">
+          <h2 className="text-xl font-semibold text-indigo-900 mb-2">Anotações da Agenda</h2>
+          <textarea
+            className="w-full h-32 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            placeholder="Digite sua anotação aqui..."
+            value={anotacao}
+            onChange={e => setAnotacao(e.target.value)}
+          />
+          <button
+            className="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg font-semibold transition-all"
+            onClick={handleSalvarAnotacao}
+            disabled={!anotacao}
+          >
+            Salvar anotação
+          </button>
+        </aside>
+      </main>
     </div>
   );
 }

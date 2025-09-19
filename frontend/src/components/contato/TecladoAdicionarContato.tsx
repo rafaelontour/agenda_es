@@ -24,24 +24,25 @@ export default function TecladoAdicionarContato({ buscarContatos, botaoAdicionar
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog} >
-            <DialogTrigger asChild className={`${ botaoAdicionarContato && "absolute top-4 right-4"}`}>
+            <DialogTrigger asChild>
                 {
-                    botaoAdicionarContato ?
-                        <Button>{botaoAdicionarContato}</Button> :
-                    <div
-                        className="
-                            w-24 h-24 rounded-full flex justify-center items-center group hover:scale-110 transition-transform duration-500 hover:cursor-pointer active:scale-100
-                        "
-                        style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
-                    >
-                        <Plus
-                            color="green"
-                            size={40}
-                            className="transform transition-transform duration-500 group-hover:rotate-[360deg] group-hover:scale-150"
-                        />
-                    </div>
+                    botaoAdicionarContato
+                        ? botaoAdicionarContato
+                        : (
+                            <div
+                                className="
+                                    w-24 h-24 rounded-full flex justify-center items-center group hover:scale-110 transition-transform duration-500 hover:cursor-pointer active:scale-100
+                                "
+                                style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
+                            >
+                                <Plus
+                                    color="green"
+                                    size={40}
+                                    className="transform transition-transform duration-500 group-hover:rotate-[360deg] group-hover:scale-150"
+                                />
+                            </div>
+                        )
                 }
-
             </DialogTrigger>
 
             <DialogContent onCloseAutoFocus={limparCampos} className="flex flex-col gap-8">
