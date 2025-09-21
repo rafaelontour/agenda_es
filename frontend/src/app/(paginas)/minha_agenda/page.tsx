@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import CartaoContato from "../../../components/contato/CartaoContato";
 import TecladoAdicionarContato from "../../../components/contato/TecladoAdicionarContato";
+import { Button } from "@/components/ui/button";
+import { logout } from "@/service/usuario";
 
 export default function Home() {
   const [contatos, setContatos] = useState<Contato[]>([]);
@@ -40,12 +42,20 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-amber-50">
       {/* Cabeçalho */}
       <header className="w-full bg-indigo-700 text-white flex items-center justify-between px-8 py-4 shadow-md fixed top-0 z-10">
-        <div className="flex items-center gap-3">
-          
           <h1 className="text-2xl font-bold">Minha Agenda</h1>
-        </div>
-        <div className="text-lg">Olá, Usuário!</div>
       </header>
+
+      <div className="absolute top-3 right-4 z-20">
+        <Button
+          onClick={() => {
+            logout()
+            window.location.href = "/";
+          }}
+          className="hover:cursor-pointer"
+        >
+          Sair
+        </Button>
+      </div>
 
       {/* Conteúdo principal */}
       <main className="flex flex-col xl:flex-row pt-24 px-6 gap-8">

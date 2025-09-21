@@ -19,9 +19,11 @@ interface Props {
 export default function AdicionarContato(props: Props) {
 
     async function salvarContato() {
-       const resposta = await salvarContatoService(props.nome, props.telefone);
+        const resposta = await salvarContatoService(props.nome, props.telefone);
 
-        if (resposta !== 201) {
+        console.log("resposta: ", resposta)
+
+        if (resposta !== 200) {
             toast.error('Não foi possível salvar o contato')
             return
         }

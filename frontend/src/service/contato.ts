@@ -2,11 +2,12 @@ import { Contato } from "@/core/contato";
 
 async function getContatosService(): Promise<Contato[] | undefined> {
     try {
-        const resposta = await fetch('http://localhost:8090/contatos', {
+        const resposta = await fetch('http://localhost:8081/minha_agenda/contatos', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            credentials: "include"
         })
 
         if (!resposta.ok) {
@@ -20,14 +21,17 @@ async function getContatosService(): Promise<Contato[] | undefined> {
 }
 
 async function salvarContatoService(nome: string, telefone: string): Promise<number | undefined> {
+    console.log("dados: ", {nome, telefone})
     try {
-        const resposta = await fetch('http://localhost:8090/contatos', {
+        const resposta = await fetch('http://localhost:8081/minha_agenda/contatos', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify({nome, telefone})
         })
+
 
         if (!resposta.ok) {
             return
@@ -41,11 +45,12 @@ async function salvarContatoService(nome: string, telefone: string): Promise<num
 
 async function atualizarContatoService(id: string | undefined, nome: string, telefone: string): Promise<number | undefined> {
     try {
-        const resposta = await fetch(`http://localhost:8090/contatos/${id}`, {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/contatos/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify({nome, telefone})
         }
         )
@@ -62,11 +67,12 @@ async function atualizarContatoService(id: string | undefined, nome: string, tel
 
 async function excluirContatoService(id: string | undefined): Promise<number | undefined> {
     try {
-        const resposta = await fetch(`http://localhost:8090/contatos/${id}`, {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/contatos/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            credentials: "include"
         })
 
         if (!resposta.ok) {

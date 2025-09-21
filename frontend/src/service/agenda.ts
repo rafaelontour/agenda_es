@@ -1,6 +1,6 @@
 async function criarAgendaService(tipo: string): Promise<{resposta: number, idAgenda: number} | undefined> {
     try {
-        const resposta = await fetch(`http://localhost:8090/agenda`, {
+        const resposta = await fetch(`http://localhost:8081/agenda`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -22,7 +22,7 @@ async function criarAgendaService(tipo: string): Promise<{resposta: number, idAg
 
 async function login(telefone: string, senha: string): Promise<number | undefined> {
     try {
-        const resposta = await fetch('http://localhost:8090/login', {
+        const resposta = await fetch('http://localhost:8081/login', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

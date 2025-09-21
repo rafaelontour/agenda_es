@@ -16,5 +16,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/minha_agenda"],
+  matcher: ["/minha_agenda/:path*"],
 };

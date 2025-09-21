@@ -28,14 +28,14 @@ export default function CartaoContato({ contato, atualizarContatos }: Props) {
         <div
             className="
                 flex flex-col gap-2 p-4
-                h-32 relative
+                h-[150px] relative
                 rounded-md border-2 border-gray-300
             "
         >
             <div className="flex">
-                <div>
+                <div className="flex flex-col justify-between gap-4">
                     <p className="text-3xl font-bold">{contato.nome}</p>
-                    <p>Telefone: {contato.telefone}</p>
+                    <p className="">Telefone: {contato.telefone}</p>
                 </div>
                 
                 <div className="flex items-center gap-2 absolute right-3 bottom-3">

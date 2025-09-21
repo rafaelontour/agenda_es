@@ -11,7 +11,7 @@ export default function EntrarAgenda() {
     const [telefone, setTelefone] = useState<string>("");
     const [senha, setSenha] = useState<string>("");
 
-     async function criarAgenda() {
+     async function entrarAgenda() {
         const resposta = await login(telefone, senha)
         
         if (resposta !== 200) {
@@ -40,11 +40,11 @@ export default function EntrarAgenda() {
                     <div className="flex flex-col gap-2">
                         <label htmlFor="nome">Telefone:</label>
                         <input
-                        id="nome"
-                        placeholder="Nome do usuário"
-                        className="border-2 border-gray-300 rounded-md h-11 w-full px-3"
-                        type="text"
-                        onChange={(e) => (e.target.value)}
+                            id="nome"
+                            placeholder="Nome do usuário"
+                            className="border-2 border-gray-300 rounded-md h-11 w-full px-3"
+                            type="text"
+                            onChange={(e) => setTelefone(e.target.value)}
                         />
                     </div>
 
@@ -60,7 +60,7 @@ export default function EntrarAgenda() {
                     </div>
 
                     <Button
-                        onClick={(e) => { e.preventDefault(); criarAgenda(); }}
+                        onClick={(e) => { e.preventDefault(); entrarAgenda(); }}
                         className="bg-purple-900 text-white h-11 rounded-md hover:bg-indigo-900 transition-colors mt-4 cursor-pointer"
                     >
                         Entrar

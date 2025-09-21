@@ -17,7 +17,7 @@ import com.engenharia_software.agenda.DTO.ContatoDTO;
 import com.engenharia_software.agenda.service.ContatoService;
 
 @RestController
-@RequestMapping("/contatos")
+@RequestMapping("/minha_agenda/contatos")
 public class ContatoController {
 
     private ContatoService cs;

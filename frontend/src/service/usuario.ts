@@ -1,6 +1,6 @@
-async function criarUsuarioService(nome: string, email: string, telefone: string, idAgenda: string, tipoAgenda: string, senha: string): Promise<number | undefined> {
+async function criarUsuarioService(nome: string, email: string, telefone: string, idAgenda: string | undefined, tipoAgenda: string, senha: string) {
     try {
-        const resposta = await fetch('http://localhost:8090/usuario', {
+        const resposta = await fetch('http://localhost:8081/usuario', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -19,37 +19,50 @@ async function criarUsuarioService(nome: string, email: string, telefone: string
             return
         }
 
-        return resposta.status
+        const json = await resposta.json();
+        console.log(json)
+
+        return json
     } catch(e) {
         return
     }
 }
 
-async function logar(nome: string, senha: string): Promise<number | undefined> {
+async function logar(id: string, nome: string, senha: string): Promise<number | undefined> {
     try {
-        const resposta = await fetch('http://localhost:8090/auth/login', {
+        const resposta = await fetch('http://localhost:8081/auth/login', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify({
+                id: id,
                 usuario: nome,
                 senha: senha
             }),
-            credentials: "include"
         })
-
+    
         if (!resposta.ok) {
             return
         }
-
         return resposta.status
     } catch(e) {
         return
     }
 }
 
+async function logout() {
+    const resposta = await fetch('http://localhost:8081/auth/logout', {
+        method: "POST",
+        credentials: "include"
+    })
+
+    console.log("SAIU", "resposta")
+}
+
 export {
     criarUsuarioService,
-    logar
+    logar,
+    logout
 }

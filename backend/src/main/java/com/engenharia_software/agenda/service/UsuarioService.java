@@ -1,5 +1,7 @@
 package com.engenharia_software.agenda.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.engenharia_software.agenda.DTO.UsuarioDTO;
@@ -20,7 +22,7 @@ public class UsuarioService {
         this.ar = ar;
     }
 
-    public boolean criarUsuario(UsuarioDTO usuario) {
+    public UsuarioDTO criarUsuario(UsuarioDTO usuario) {
         Agenda a = ar.findById(usuario.getIdAgenda()).get();
         
         Usuario u = new Usuario();
@@ -28,7 +30,10 @@ public class UsuarioService {
         u.setNome(usuario.getNome());
         u.setEmail(usuario.getEmail());
         u.setTelefone(usuario.getTelefone());
-        u.setSenha(usuario.getSenha());
+
+        PasswordEncoder pe = new BCryptPasswordEncoder();
+        String senhaCriptografada = pe.encode(usuario.getSenha());
+        u.setSenha(senhaCriptografada);
 
         Agenda agenda = FabricaAgenda.getInstancia().criarAgenda(usuario.getTipoAgenda());
 
@@ -38,7 +43,15 @@ public class UsuarioService {
         u.setAgenda(a);
 
         Usuario usuarioSalvo = ur.save(u);
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
 
-        return usuarioSalvo.getId() != null;
+        usuarioDTO.setId(usuarioSalvo.getId());
+        usuarioDTO.setIdAgenda(usuarioSalvo.getAgenda().getId());
+        usuarioDTO.setNome(usuarioSalvo.getNome());
+        usuarioDTO.setEmail(usuarioSalvo.getEmail());
+        usuarioDTO.setTelefone(usuarioSalvo.getTelefone());
+        usuarioDTO.setTipoAgenda(usuarioSalvo.getAgenda().getTipo());
+
+        return usuarioDTO;
     }
 }

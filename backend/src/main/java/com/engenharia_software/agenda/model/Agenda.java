@@ -1,6 +1,7 @@
 package com.engenharia_software.agenda.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.engenharia_software.agenda.Factory.TipoAgenda;
@@ -34,4 +35,10 @@ public abstract class Agenda {
 
     @OneToMany(mappedBy = "agenda")
     private List<Contato> contatos = new ArrayList<>();
+    
+    public abstract void adicionarContato(Contato contato);
+    public abstract Contato getContato(String telefone);
+    public abstract Contato atualizarContato(Contato contato);
+    public abstract boolean removerContato(Contato contato);
+    public abstract Collection<Contato> getListaAgenda();
 }

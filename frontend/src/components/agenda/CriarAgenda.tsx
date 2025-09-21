@@ -21,22 +21,25 @@ export default function CriarAgenda() {
     
     async function criarAgendaUsuario() {
         const resposta = await criarAgendaService(tipoAgenda)
-        alert(resposta);
+        const codigohttp = resposta?.resposta
+        const idAgenda = resposta?.idAgenda
 
-        if (resposta?.resposta !== 201) {
+        if (codigohttp !== 201) {
             toast.error('Não foi possível criar a agenda')
             return
         }
 
-        const respostaUsuario = await criarUsuarioService(nome, email, telefone, resposta.idAgenda.toString(), tipoAgenda, senha)
+        const respostaUsuario = await criarUsuarioService(nome, email, telefone, idAgenda?.toString() , tipoAgenda, senha)
 
-        if (respostaUsuario == 201) {
+        if (respostaUsuario != null) {
             setDadosUsuario(true)
             toast.success('Agenda criada com sucesso! Redirecionando...')
-            const respostaLogar = await logar(nome, senha)
+            const respostaLogar = await logar(respostaUsuario.id, nome, senha)
+
+            console.log("respostaLogar", respostaLogar)
             
-            if (respostaLogar !== 200) {
-                toast.error('Não foi possível criar o usuário')
+            if (respostaLogar !== 201) {
+                toast.error('Não foi possível logar')
                 return
             }
             nav.push('/minha_agenda')
@@ -48,7 +51,6 @@ export default function CriarAgenda() {
             return
         }
         
-        alert("RESPOSTA USUARIO: " + respostaUsuario)
         toast.error('Não foi possível criar o usuário')
     }
 

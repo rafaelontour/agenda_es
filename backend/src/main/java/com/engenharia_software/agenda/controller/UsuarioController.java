@@ -21,13 +21,13 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<String> criarUsuario(@RequestBody UsuarioDTO usuario) {
-        boolean resposta = us.criarUsuario(usuario);
+    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody UsuarioDTO usuario) {
+        UsuarioDTO resposta = us.criarUsuario(usuario);
 
-        if (resposta) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuário criado com sucesso.");
+        if (resposta != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
         }
 
-        return ResponseEntity.badRequest().body("Erro ao criar usuário.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 }
