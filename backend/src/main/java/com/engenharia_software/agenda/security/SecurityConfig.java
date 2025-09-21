@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 public class SecurityConfig {
@@ -20,7 +19,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             // definindo quem pode acessar o quê
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login").permitAll()  // acesso público
+                .requestMatchers("/auth/login", "/auth/me").permitAll()  // acesso público
                 .requestMatchers("/agenda", "/usuario", "/minha_agenda/**").permitAll() // acesso público
                 .anyRequest().authenticated()                   // resto precisa estar logado
             )
@@ -32,11 +31,9 @@ public class SecurityConfig {
                 corsConfig.setAllowedHeaders(List.of("*"));
                 return corsConfig;
             }))
-            .formLogin(form -> form
-                .loginProcessingUrl("/") // 🔑 define URL de login;
-                .successHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_OK))
-                .failureHandler((req, res, ex) -> res.setStatus(HttpServletResponse.SC_UNAUTHORIZED))
-            ); 
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 🔑 garante que a sessão seja criada
+            );
 
         return http.build();
     }

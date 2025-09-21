@@ -14,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ContatoDTO {
     private Long id;
+    private Long idAgenda;
     private String nome;
     private String telefone;
 

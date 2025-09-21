@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.engenharia_software.agenda.DTO.LoginDTO;
+import com.engenharia_software.agenda.DTO.UsuarioDTO;
 import com.engenharia_software.agenda.model.Usuario;
 import com.engenharia_software.agenda.repository.UsuarioRepository;
 
@@ -28,16 +29,17 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean login(LoginDTO login, HttpServletRequest request) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(login.getId());
+    public UsuarioDTO login(LoginDTO login, HttpServletRequest request) {
 
-        if (usuarioOpt.isEmpty()) return false;
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByTelefone(login.getTelefone());
+
+        if (usuarioOpt.isEmpty()) return null;
 
         Usuario usuario = usuarioOpt.get();
 
         // compara senha com hash
         if (!passwordEncoder.matches(login.getSenha(), usuario.getSenha())) {
-            return false;
+            return null;
         }
 
         // cria sessão
@@ -50,6 +52,15 @@ public class AuthService {
         );
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        return true;
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setIdAgenda(usuario.getAgenda().getId());
+        usuarioDTO.setNome(usuario.getNome());
+        usuarioDTO.setEmail(usuario.getEmail());
+        usuarioDTO.setTelefone(usuario.getTelefone());
+        usuarioDTO.setTipoAgenda(usuario.getAgenda().getTipo());
+
+        return usuarioDTO;
     }
 }

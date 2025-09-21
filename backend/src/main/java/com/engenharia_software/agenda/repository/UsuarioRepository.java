@@ -8,4 +8,5 @@ import com.engenharia_software.agenda.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByNome(String nome);
+    Optional<Usuario> findByTelefone(String telefone);
 }

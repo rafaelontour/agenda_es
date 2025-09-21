@@ -1,12 +1,15 @@
 package com.engenharia_software.agenda.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.engenharia_software.agenda.model.Agenda;
 import com.engenharia_software.agenda.model.Contato;
 
 import com.engenharia_software.agenda.DTO.ContatoDTO;
+import com.engenharia_software.agenda.repository.AgendaRepository;
 import com.engenharia_software.agenda.repository.ContatoRepository;
 
 import jakarta.transaction.Transactional;
@@ -14,21 +17,38 @@ import jakarta.transaction.Transactional;
 @Service
 public class ContatoService {
 
-    private ContatoRepository cr;
+    private final ContatoRepository cr;
+    private final AgendaRepository ar;
     
-    public ContatoService(ContatoRepository cr) {
+    public ContatoService(ContatoRepository cr, AgendaRepository ar) {
         this.cr = cr;
+        this.ar = ar;
     }
 
-    public List<ContatoDTO> listarContato() {
-        List<Contato> contatos = cr.findAll();
-        List<ContatoDTO> contatosDTO = contatos.stream().map(x -> new ContatoDTO(x)).toList();
+    public List<ContatoDTO> listarContato(Long idAgenda) {
+        List<Contato> contatos = cr.findByAgendaId(idAgenda); // retorna lista vazia se não houver
+
+        System.out.println("CONTATOS: " + contatos);
+
+        if (contatos.isEmpty()) {
+            return List.of(); // evita retornar null
+        }
+
+        // mapear os dados do Contato para o DTO
+        List<ContatoDTO> contatosDTO = contatos.stream()
+            .map(contato -> new ContatoDTO(contato))
+            .toList();
+
         return contatosDTO;
     }
     
     @Transactional
     public ContatoDTO adicionarContato(ContatoDTO contato) {
+
+        Agenda a = ar.findById(contato.getIdAgenda()).get();
+
         Contato c = new Contato();
+        c.setAgenda(a);
         c.setNome(contato.getNome());
         c.setTelefone(contato.getTelefone());
 
