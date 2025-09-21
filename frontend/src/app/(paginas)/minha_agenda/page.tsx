@@ -10,6 +10,7 @@ import TecladoAdicionarContato from "../../../components/contato/TecladoAdiciona
 import { Button } from "@/components/ui/button";
 import { logout } from "@/service/usuario";
 import useUsuario from "@/data/hook/useUsuario";
+import { salvarAnotacaoService } from "@/service/anotacao";
 
 export default function Home() {
   const [contatos, setContatos] = useState<Contato[]>([]);
@@ -36,7 +37,13 @@ export default function Home() {
     buscarContatos();
   }, []);
 
-  function handleSalvarAnotacao() {
+  async function handleSalvarAnotacao() {
+    const resposta = await salvarAnotacaoService(idAgenda, anotacao);
+    if (resposta !== 201) {
+      toast.error('Não foi possível salvar a anotação');
+      return;
+    } 
+
     toast.success('Anotação salva!');
     setAnotacao("");
   }
