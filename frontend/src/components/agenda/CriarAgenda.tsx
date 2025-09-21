@@ -15,7 +15,7 @@ export default function CriarAgenda() {
     const [tipoAgenda, setTipoAgenda] = useState<string>("LIST");
     const nav = useRouter();
 
-    const { nome, setNome, email, setEmail, telefone, setTelefone, setDadosUsuario } = useUsuario();
+    const { nome, setNome, email, setEmail, telefone, setTelefone, setIdAgenda, setId } = useUsuario();
     const [senha, setSenha] = useState<string>("");
     const [mostrarSenha, setMostrarSenha] = useState<boolean>(false);
     
@@ -32,13 +32,17 @@ export default function CriarAgenda() {
         const respostaUsuario = await criarUsuarioService(nome, email, telefone, idAgenda?.toString() , tipoAgenda, senha)
 
         if (respostaUsuario != null) {
-            setDadosUsuario(true)
-            toast.success('Agenda criada com sucesso! Redirecionando...')
-            const respostaLogar = await logar(respostaUsuario.id, nome, senha)
-
-            console.log("respostaLogar", respostaLogar)
+            setId(respostaUsuario.id)
+            setNome(respostaUsuario.nome)
+            setEmail(respostaUsuario.email)
+            setTelefone(respostaUsuario.telefone)
+            setIdAgenda(respostaUsuario.idAgenda)
+            setTipoAgenda(respostaUsuario.tipoAgenda)
             
-            if (respostaLogar !== 201) {
+            toast.success('Agenda criada com sucesso! Redirecionando...')
+            const respostaLogar = await logar(telefone, senha)
+            
+            if (respostaLogar !== 200) {
                 toast.error('Não foi possível logar')
                 return
             }

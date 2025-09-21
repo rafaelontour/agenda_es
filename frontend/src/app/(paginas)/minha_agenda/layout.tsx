@@ -6,9 +6,22 @@ import "../../globals.css";
 import { UsuarioContextoProvider } from "@/data/context/UsuarioContexto";
 import useUsuario from "@/data/hook/useUsuario";
 import { User, Mail, Phone, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Contato } from "@/core/contato";
+import { getContatosService } from "@/service/contato";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const { nome, email, telefone } = useUsuario();
+  const { usuario, idAgenda, nome, email, telefone } = useUsuario();
+  const [contatos, setContatos] = useState<Contato[]>([]);
+
+  async function buscarContatos() {
+    const resposta = await getContatosService(idAgenda);
+    setContatos(resposta || []);
+  }
+
+  useEffect(() => {
+    buscarContatos();
+  }, []);
 
   return (
     <html lang="pt-BR">
@@ -22,28 +35,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 
                   <User size={56} className="text-indigo-400" />
                 </div>
-                <span className="text-white font-semibold">{nome || "Usuário"}</span>
+                <span className="text-white font-semibold">{usuario.nome || "Usuário"}</span>
               </div>
 
               <div className="flex flex-col gap-4 px-2">
                 <div className="flex items-center gap-2 text-white">
                   <Mail size={18} className="opacity-80" />
-                  <span className="font-medium">{email || "email@exemplo.com"}</span>
+                  <span className="font-medium">{usuario.email || "email@exemplo.com"}</span>
                 </div>
                 <div className="flex items-center gap-2 text-white">
                   <Phone size={18} className="opacity-80" />
-                  <span className="font-medium">{telefone || "(00) 00000-0000"}</span>
+                  <span className="font-medium">{usuario.telefone || "(00) 00000-0000"}</span>
                 </div>
                 <div className="flex items-center gap-2 bg-indigo-800 rounded-lg px-3 py-2 mt-2 shadow text-white">
                   <Users size={18} />
                   <span className="font-semibold">Contatos:</span>
-                  <span className="ml-1">100</span>
+                  <span className="ml-1">{contatos.length}</span>
                 </div>
               </div>
-
-   
-                <Calendario />
-           
+              
+              <Calendario />
             </aside>
 
             <main className="w-full h-screen py-6 overflow-hidden bg-gradient-to-br from-indigo-50 to-amber-50">

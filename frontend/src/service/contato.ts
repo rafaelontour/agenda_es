@@ -1,8 +1,9 @@
 import { Contato } from "@/core/contato";
 
-async function getContatosService(): Promise<Contato[] | undefined> {
+async function getContatosService(idAgenda?: string): Promise<Contato[] | undefined> {
+    const idAgendaInt = parseInt(idAgenda || '0');
     try {
-        const resposta = await fetch('http://localhost:8081/minha_agenda/contatos', {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/contatos/${idAgendaInt}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -20,7 +21,7 @@ async function getContatosService(): Promise<Contato[] | undefined> {
     }
 }
 
-async function salvarContatoService(nome: string, telefone: string): Promise<number | undefined> {
+async function salvarContatoService(idAgenda: string, nome: string, telefone: string): Promise<number | undefined> {
     console.log("dados: ", {nome, telefone})
     try {
         const resposta = await fetch('http://localhost:8081/minha_agenda/contatos', {
@@ -29,7 +30,7 @@ async function salvarContatoService(nome: string, telefone: string): Promise<num
                 "Content-Type": "application/json"
             },
             credentials: "include",
-            body: JSON.stringify({nome, telefone})
+            body: JSON.stringify({idAgenda, nome, telefone})
         })
 
 

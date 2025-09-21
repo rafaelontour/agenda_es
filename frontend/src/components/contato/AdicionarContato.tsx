@@ -6,6 +6,7 @@ import { UserPlus } from "lucide-react";
 import { useState } from "react";
 import { salvarContatoService } from "@/service/contato";
 import { toast } from "sonner";
+import useUsuario from "@/data/hook/useUsuario";
 
 interface Props {
     nome: string;
@@ -18,10 +19,10 @@ interface Props {
 
 export default function AdicionarContato(props: Props) {
 
-    async function salvarContato() {
-        const resposta = await salvarContatoService(props.nome, props.telefone);
+    const { idAgenda } = useUsuario();
 
-        console.log("resposta: ", resposta)
+    async function salvarContato() {
+        const resposta = await salvarContatoService(idAgenda,props.nome, props.telefone);
 
         if (resposta !== 200) {
             toast.error('Não foi possível salvar o contato')

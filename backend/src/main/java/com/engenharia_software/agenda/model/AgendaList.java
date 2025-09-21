@@ -16,6 +16,7 @@ public class AgendaList extends Agenda {
     @Transient
     private List<Contato> contatos = new ArrayList<>();
 
+    @Override
     public void adicionarContato(Contato contato) {
         contatos.add(contato);
     }

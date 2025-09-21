@@ -20,7 +20,6 @@ async function criarUsuarioService(nome: string, email: string, telefone: string
         }
 
         const json = await resposta.json();
-        console.log(json)
 
         return json
     } catch(e) {
@@ -28,7 +27,7 @@ async function criarUsuarioService(nome: string, email: string, telefone: string
     }
 }
 
-async function logar(id: string, nome: string, senha: string): Promise<number | undefined> {
+async function logar(telefone: string, senha: string): Promise<number | undefined> {
     try {
         const resposta = await fetch('http://localhost:8081/auth/login', {
             method: "POST",
@@ -37,8 +36,7 @@ async function logar(id: string, nome: string, senha: string): Promise<number | 
             },
             credentials: "include",
             body: JSON.stringify({
-                id: id,
-                usuario: nome,
+                telefone: telefone,
                 senha: senha
             }),
         })

@@ -9,15 +9,18 @@ import CartaoContato from "../../../components/contato/CartaoContato";
 import TecladoAdicionarContato from "../../../components/contato/TecladoAdicionarContato";
 import { Button } from "@/components/ui/button";
 import { logout } from "@/service/usuario";
+import useUsuario from "@/data/hook/useUsuario";
 
 export default function Home() {
   const [contatos, setContatos] = useState<Contato[]>([]);
   const [loading, setLoading] = useState(false);
   const [anotacao, setAnotacao] = useState("");
 
+  const { idAgenda, setId, setNome, setEmail, setTelefone, setIdAgenda, setTipoAgenda } = useUsuario();
+
   async function buscarContatos() {
     setLoading(true);
-    const resposta = await getContatosService();
+    const resposta = await getContatosService(idAgenda);
 
     if (resposta === undefined) {
       toast.error('Não foi possível buscar os contatos');
@@ -48,6 +51,12 @@ export default function Home() {
       <div className="absolute top-3 right-4 z-20">
         <Button
           onClick={() => {
+            setId("")
+            setNome("")
+            setEmail("")
+            setTelefone("")
+            setIdAgenda("")
+            setTipoAgenda("")
             logout()
             window.location.href = "/";
           }}

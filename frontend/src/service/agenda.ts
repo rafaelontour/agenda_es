@@ -20,13 +20,14 @@ async function criarAgendaService(tipo: string): Promise<{resposta: number, idAg
     }
 }
 
-async function login(telefone: string, senha: string): Promise<number | undefined> {
+async function login(telefone: string, senha: string) {
     try {
-        const resposta = await fetch('http://localhost:8081/login', {
+        const resposta = await fetch('http://localhost:8081/auth/login', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify({telefone, senha})
         })
 
@@ -34,7 +35,9 @@ async function login(telefone: string, senha: string): Promise<number | undefine
             return
         }
 
-        return resposta.status
+        const json = await resposta.json();
+
+        return json
     } catch(e) {
         return
     }
