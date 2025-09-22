@@ -14,7 +14,7 @@ export default function EntrarAgenda() {
     const [telefone, setTel] = useState<string>("");
     const [senha, setSenha] = useState<string>("");
 
-    const { setId, setNome, setEmail, setTelefone, setIdAgenda, setTipoAgenda } = useUsuario();
+    const { usuario } = useUsuario();
 
      async function entrarAgenda() {
         const resposta = await login(telefone, senha)
@@ -26,12 +26,13 @@ export default function EntrarAgenda() {
             return
         }
 
-        setId(resposta.id)
-        setNome(resposta.nome)
-        setEmail(resposta.email)
-        setTelefone(resposta.telefone)
-        setIdAgenda(resposta.idAgenda)
-        setTipoAgenda(resposta.tipoAgenda)
+        usuario.id = resposta.id
+        usuario.idAgenda = resposta.idAgenda
+        usuario.nome = resposta.nome
+        usuario.email = resposta.email
+        usuario.telefone = resposta.telefone
+        usuario.tipoAgenda = resposta.tipoAgenda
+
 
         toast.success('Logando...')
         nav.push('/minha_agenda')

@@ -55,8 +55,6 @@ async function logout() {
         method: "POST",
         credentials: "include"
     })
-
-    console.log("SAIU", "resposta")
 }
 
 export {

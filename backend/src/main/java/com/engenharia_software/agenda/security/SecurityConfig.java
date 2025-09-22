@@ -19,7 +19,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             // definindo quem pode acessar o quê
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login", "/auth/me").permitAll()  // acesso público
+                .requestMatchers("/auth/login", "/auth/me", "/auth/logout").permitAll()  // acesso público
                 .requestMatchers("/agenda", "/usuario", "/minha_agenda/**").permitAll() // acesso público
                 .anyRequest().authenticated()                   // resto precisa estar logado
             )
@@ -32,7 +32,7 @@ public class SecurityConfig {
                 return corsConfig;
             }))
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 🔑 garante que a sessão seja criada
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) 
             );
 
         return http.build();

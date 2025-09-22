@@ -54,6 +54,7 @@ public class ContatoService {
 
         Contato contatoCriado = cr.save(c);
         ContatoDTO contatoCriadoDTO = new ContatoDTO(contatoCriado);
+
         return contatoCriadoDTO;
     }
 

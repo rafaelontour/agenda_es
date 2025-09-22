@@ -54,9 +54,12 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<?> me(HttpServletRequest request) {
-        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
+        HttpSession session = request.getSession(false); // não cria sessão nova
+        if (session != null) {
+            UsuarioDTO usuario = (UsuarioDTO) session.getAttribute("usuario");
+            if (usuario != null) {
+                return ResponseEntity.ok(usuario);
+            }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Não autorizado!");
     }

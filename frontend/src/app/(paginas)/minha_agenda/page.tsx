@@ -17,11 +17,11 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [anotacao, setAnotacao] = useState("");
 
-  const { idAgenda, setId, setNome, setEmail, setTelefone, setIdAgenda, setTipoAgenda } = useUsuario();
+  const { usuario } = useUsuario();
 
   async function buscarContatos() {
     setLoading(true);
-    const resposta = await getContatosService(idAgenda);
+    const resposta = await getContatosService(usuario.idAgenda);
 
     if (resposta === undefined) {
       toast.error('Não foi possível buscar os contatos');
@@ -58,12 +58,13 @@ export default function Home() {
       <div className="absolute top-3 right-4 z-20">
         <Button
           onClick={() => {
-            setId("")
-            setNome("")
-            setEmail("")
-            setTelefone("")
-            setIdAgenda("")
-            setTipoAgenda("")
+            usuario.id = "";
+            usuario.idAgenda = "";
+            usuario.nome = "";
+            usuario.email = "";
+            usuario.telefone = "";
+            usuario.tipoAgenda = "";
+            toast.success('Saindo...')
             logout()
             window.location.href = "/";
           }}
