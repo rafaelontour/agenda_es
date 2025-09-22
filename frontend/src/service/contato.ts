@@ -1,9 +1,14 @@
 import { Contato } from "@/core/contato";
 
 async function getContatosService(idAgenda?: string): Promise<Contato[] | undefined> {
-    const idAgendaInt = parseInt(idAgenda || '0');
+    if (!idAgenda) {
+        return
+    }
+
+    const idAgendaInt = parseInt(idAgenda);
+
     try {
-        const resposta = await fetch(`http://localhost:8081/minha_agenda/contatos/${idAgendaInt}`, {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/contatos/agenda/${idAgendaInt}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

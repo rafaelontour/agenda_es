@@ -19,10 +19,13 @@ interface Props {
 
 export default function AdicionarContato(props: Props) {
 
-    const { idAgenda } = useUsuario();
+    const { usuario } = useUsuario();
 
     async function salvarContato() {
-        const resposta = await salvarContatoService(idAgenda,props.nome, props.telefone);
+        console.log("id da agenda passado: ", usuario?.idAgenda)
+
+        if (!usuario) return
+        const resposta = await salvarContatoService(usuario?.idAgenda, props.nome, props.telefone);
 
         if (resposta !== 200) {
             toast.error('Não foi possível salvar o contato')

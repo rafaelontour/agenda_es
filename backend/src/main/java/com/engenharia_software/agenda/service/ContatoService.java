@@ -28,6 +28,7 @@ public class ContatoService {
     public List<ContatoDTO> listarContato(Long idAgenda) {
         List<Contato> contatos = cr.findByAgendaId(idAgenda); // retorna lista vazia se não houver
 
+        System.out.println("ID AGENDA: " + idAgenda);
         System.out.println("CONTATOS: " + contatos);
 
         if (contatos.isEmpty()) {

@@ -25,7 +25,7 @@ public class ContatoController {
     public ContatoController(ContatoService cs) {
         this.cs = cs;
     }
-    @GetMapping("/{idAgenda}")
+    @GetMapping("/agenda/{idAgenda}")
     public ResponseEntity<List<ContatoDTO>> listarContatos(@PathVariable Long idAgenda) {
         List<ContatoDTO> contatos = cs.listarContato(idAgenda);
         return ResponseEntity.status(HttpStatus.OK).body(contatos);

@@ -11,17 +11,20 @@ import { Button } from "@/components/ui/button";
 import { logout } from "@/service/usuario";
 import useUsuario from "@/data/hook/useUsuario";
 import { salvarAnotacaoService } from "@/service/anotacao";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [contatos, setContatos] = useState<Contato[]>([]);
   const [loading, setLoading] = useState(false);
   const [anotacao, setAnotacao] = useState("");
+  
+  const router = useRouter();
 
   const { usuario } = useUsuario();
 
   async function buscarContatos() {
     setLoading(true);
-    const resposta = await getContatosService(usuario.idAgenda);
+    const resposta = await getContatosService(usuario?.idAgenda);
 
     if (resposta === undefined) {
       toast.error('Não foi possível buscar os contatos');
@@ -34,11 +37,13 @@ export default function Home() {
   }
 
   useEffect(() => {
-    buscarContatos();
-  }, []);
+    if (usuario?.idAgenda) {
+      buscarContatos();
+    }
+  }, [usuario]);
 
   async function handleSalvarAnotacao() {
-    const resposta = await salvarAnotacaoService(idAgenda, anotacao);
+    const resposta = await salvarAnotacaoService(usuario?.idAgenda, anotacao);
     if (resposta !== 201) {
       toast.error('Não foi possível salvar a anotação');
       return;
@@ -58,15 +63,15 @@ export default function Home() {
       <div className="absolute top-3 right-4 z-20">
         <Button
           onClick={() => {
-            usuario.id = "";
-            usuario.idAgenda = "";
-            usuario.nome = "";
-            usuario.email = "";
-            usuario.telefone = "";
-            usuario.tipoAgenda = "";
+            usuario!.id = "";
+            usuario!.idAgenda = "";
+            usuario!.nome = "";
+            usuario!.email = "";
+            usuario!.telefone = "";
+            usuario!.tipoAgenda = "";
             toast.success('Saindo...')
             logout()
-            window.location.href = "/";
+            router.push('/')
           }}
           className="hover:cursor-pointer"
         >

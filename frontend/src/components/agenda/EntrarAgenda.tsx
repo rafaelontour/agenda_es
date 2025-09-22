@@ -26,6 +26,8 @@ export default function EntrarAgenda() {
             return
         }
 
+        if (!usuario) return
+
         usuario.id = resposta.id
         usuario.idAgenda = resposta.idAgenda
         usuario.nome = resposta.nome

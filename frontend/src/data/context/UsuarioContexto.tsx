@@ -1,49 +1,44 @@
 'use client'
 
 import { Usuario } from "@/core";
-import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { createContext, useEffect, useState } from "react";
 
 export interface UsuarioContextoProps {
-    usuario: Usuario
+    usuario: Usuario | null
 }
 
-export const UsuarioContexto = createContext<UsuarioContextoProps | undefined>({} as UsuarioContextoProps)
+export const UsuarioContexto = createContext<UsuarioContextoProps | undefined>(undefined);
 
 export const UsuarioContextoProvider = ({ children }: { children: React.ReactNode}) => {
 
-    const usuario: Usuario = {
-        id: "",
-        idAgenda: "",
-        nome: "",
-        email: "",
-        telefone: "",
-        tipoAgenda: ""
-    }
+    const [usuario, setUsuario] = useState<Usuario | null>(null);
 
     async function info() {
-        const resposta = await fetch('http://localhost:8081/auth/me', { credentials: "include" })
-        const json = await resposta.json()
-        
-        usuario.id = json.id
-        usuario.idAgenda = json.idAgenda
-        usuario.nome = json.nome
-        usuario.email = json.email
-        usuario.telefone = json.telefone
-        usuario.tipoAgenda = json.tipoAgenda
+        try {
+            const resposta = await fetch('http://localhost:8081/auth/me', { credentials: "include" });
+            if (!resposta.ok) return; // se não estiver logado
+            const json = await resposta.json();
+
+            setUsuario({
+                id: json.id,
+                idAgenda: json.idAgenda,
+                nome: json.nome,
+                email: json.email,
+                telefone: json.telefone,
+                tipoAgenda: json.tipoAgenda
+            });
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     useEffect(() => {
-        info()
-    }, [usuario])
+        info();
+    }, []);
 
     return (
-        <UsuarioContexto.Provider
-            value={{
-                usuario
-            }}
-        >
+        <UsuarioContexto.Provider value={{ usuario }}>
             {children}
         </UsuarioContexto.Provider>
-    )
+    );
 }

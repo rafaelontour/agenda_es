@@ -1,6 +1,6 @@
 
 
-async function salvarAnotacaoService(idAgenda: string, conteudo: string): Promise<number | undefined> {
+async function salvarAnotacaoService(idAgenda: string | undefined, conteudo: string): Promise<number | undefined> {
     try {
         const resposta = await fetch(`http://localhost:8081/minha_agenda/anotacoes`, {
             method: 'POST',
