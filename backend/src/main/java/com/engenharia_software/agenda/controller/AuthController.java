@@ -25,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO login, HttpServletRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO login, HttpServletRequest request) { 
         UsuarioDTO usuario = as.login(login, request);
         if (usuario != null) {
             request.getSession().setAttribute("usuario", usuario);

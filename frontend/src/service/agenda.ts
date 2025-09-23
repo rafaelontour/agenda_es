@@ -5,6 +5,7 @@ async function criarAgendaService(tipo: string): Promise<{resposta: number, idAg
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify(tipo)
         })
         

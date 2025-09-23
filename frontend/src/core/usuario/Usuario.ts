@@ -4,5 +4,6 @@ export default interface Usuario {
     nome: string,
     email: string,
     telefone: string,
-    tipoAgenda: string
+    tipoAgenda: string,
+    imagemUrl?: string
 }

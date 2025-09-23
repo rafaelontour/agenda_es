@@ -13,4 +13,5 @@ public class LoginDTO {
     private Long id;
     private String telefone;
     private String senha;
+    private String imagemUrl;
 }

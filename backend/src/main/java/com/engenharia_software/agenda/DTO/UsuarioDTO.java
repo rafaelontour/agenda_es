@@ -16,4 +16,5 @@ public class UsuarioDTO {
     private String telefone;
     private TipoAgenda tipoAgenda;
     private String senha;
+    private String imagemUrl;
 }

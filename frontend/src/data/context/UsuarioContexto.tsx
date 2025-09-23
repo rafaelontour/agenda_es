@@ -19,7 +19,8 @@ export const UsuarioContextoProvider = ({ children }: { children: React.ReactNod
         nome: "",
         email: "",
         telefone: "",
-        tipoAgenda: ""
+        tipoAgenda: "",
+        imagemUrl: ""
     });
 
     async function info() {
@@ -28,13 +29,16 @@ export const UsuarioContextoProvider = ({ children }: { children: React.ReactNod
             if (!resposta.ok) return; // se não estiver logado
             const json = await resposta.json();
 
+            console.log("usuario", json);
+
             setUsuario({
                 id: json.id,
                 idAgenda: json.idAgenda,
                 nome: json.nome,
                 email: json.email,
                 telefone: json.telefone,
-                tipoAgenda: json.tipoAgenda
+                tipoAgenda: json.tipoAgenda,
+                imagemUrl: json.imagemUrl
             });
         } catch (e) {
             console.error(e);

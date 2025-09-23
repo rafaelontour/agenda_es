@@ -32,6 +32,8 @@ public class Usuario {
     private String email;
     private String telefone;
 
+    private String imagemUrl;
+
     @Column(nullable = false)
     private String senha;
 }

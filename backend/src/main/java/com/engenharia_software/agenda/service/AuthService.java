@@ -60,6 +60,7 @@ public class AuthService {
         usuarioDTO.setEmail(usuario.getEmail());
         usuarioDTO.setTelefone(usuario.getTelefone());
         usuarioDTO.setTipoAgenda(usuario.getAgenda().getTipo());
+        usuarioDTO.setImagemUrl(usuario.getImagemUrl());
 
         return usuarioDTO;
     }

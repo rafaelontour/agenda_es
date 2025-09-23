@@ -57,8 +57,44 @@ async function logout() {
     })
 }
 
+async function enviarFotoUsuario(file: File) {
+    try {
+        const formData = new FormData();
+        formData.append("file", file);
+        const resposta = await fetch(`http://localhost:8081/uploads/imagem_perfil`, {
+            method: "POST",
+            credentials: "include",
+            body: formData,
+        });
+
+        const data = await resposta.json();
+        console.log("Resposta do upload:", data);
+
+        if (!resposta.ok) {
+            return;
+        }
+    } catch (e) {
+        return;
+    }
+    
+}
+
+async function buscarImagemUsuarioService(imagemUrl: string | undefined) {
+    const response = await fetch("http://localhost:8081" + imagemUrl, {
+        method: "GET",
+        credentials: "include", // envia cookies de sessão
+    });
+    
+    if (!response.ok) return;
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    return url;
+};
 export {
     criarUsuarioService,
+    enviarFotoUsuario,
+    buscarImagemUsuarioService,
     logar,
     logout
 }
