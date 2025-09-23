@@ -3,7 +3,6 @@
 import { Sheet,SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
-import { useState } from "react";
 import { salvarContatoService } from "@/service/contato";
 import { toast } from "sonner";
 import useUsuario from "@/data/hook/useUsuario";
@@ -22,12 +21,11 @@ export default function AdicionarContato(props: Props) {
     const { usuario } = useUsuario();
 
     async function salvarContato() {
-        console.log("id da agenda passado: ", usuario?.idAgenda)
-
         if (!usuario) return
+
         const resposta = await salvarContatoService(usuario?.idAgenda, props.nome, props.telefone);
 
-        if (resposta !== 200) {
+        if (resposta !== 201) {
             toast.error('Não foi possível salvar o contato')
             return
         } 

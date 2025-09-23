@@ -27,7 +27,6 @@ async function getContatosService(idAgenda?: string): Promise<Contato[] | undefi
 }
 
 async function salvarContatoService(idAgenda: string, nome: string, telefone: string): Promise<number | undefined> {
-    console.log("dados: ", {nome, telefone})
     try {
         const resposta = await fetch('http://localhost:8081/minha_agenda/contatos', {
             method: "POST",
