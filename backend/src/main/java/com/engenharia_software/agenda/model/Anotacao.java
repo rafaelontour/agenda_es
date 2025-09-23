@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Anotacao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
     private String titulo;
     private String conteudo;
     

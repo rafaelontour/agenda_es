@@ -10,13 +10,34 @@ import TecladoAdicionarContato from "../../../components/contato/TecladoAdiciona
 import { Button } from "@/components/ui/button";
 import { logout } from "@/service/usuario";
 import useUsuario from "@/data/hook/useUsuario";
-import { salvarAnotacaoService } from "@/service/anotacao";
+import { listarAnotacoesService, salvarAnotacaoService } from "@/service/anotacao";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [contatos, setContatos] = useState<Contato[]>([]);
   const [loading, setLoading] = useState(false);
   const [anotacao, setAnotacao] = useState("");
+
+  const [titulo, setTitulo] = useState("");
+
+  interface Anotacao {
+  id: string;
+  texto: string;
+  createdAt: string;
+}
+
+  const [anotacoes, setAnotacoes] = useState<{id: string, titulo: string, conteudo: string,createdAt: string}[]>([]);
+  
+  async function carregarAnotacoes() {
+    const lista = await listarAnotacoesService();
+    setAnotacoes(lista);
+  }
+  
+  useEffect(() => {
+    
+    carregarAnotacoes();
+  }, []);
+  
   
   const router = useRouter();
 
@@ -43,13 +64,14 @@ export default function Home() {
   }, [usuario]);
 
   async function handleSalvarAnotacao() {
-    const resposta = await salvarAnotacaoService(usuario?.idAgenda, anotacao);
+    const resposta = await salvarAnotacaoService(usuario?.idAgenda, titulo, anotacao);
     if (resposta !== 201) {
       toast.error('Não foi possível salvar a anotação');
       return;
     } 
 
     toast.success('Anotação salva!');
+    setTitulo("");
     setAnotacao("");
   }
 
@@ -127,6 +149,17 @@ export default function Home() {
         {/* Anotações */}
         <aside className="xl:w-[35%] bg-white rounded-xl shadow-lg p-8 flex flex-col gap-4 h-fit">
           <h2 className="text-xl font-semibold text-indigo-900 mb-2">Anotações da Agenda</h2>
+          <label htmlFor="">Titulo:</label>
+          <input 
+            id="titulo"
+            type="text" 
+            className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-300 " 
+            placeholder="Digite o titulo da sua anotação aqui..."
+            value={titulo}
+            onChange={e => setTitulo(e.target.value)}
+          
+          />
+
           <textarea
             className="w-full h-32 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
             placeholder="Digite sua anotação aqui..."
@@ -140,6 +173,30 @@ export default function Home() {
           >
             Salvar anotação
           </button>
+
+          <div className="mt-4">
+            <h3 className="text-lg font-semibold text-indigo-800 mb-2">Minhas Anotações</h3>
+
+            <div className="max-h-64 overflow-y-auto border rounded-lg p-3 bg-gray-50">
+              {anotacoes.length === 0 ? (
+                <p className="text-gray-500 text-center">Nenhuma anotação encontrada.</p>
+              ) : (
+                anotacoes.map((anotacao) => (
+                  <div 
+                    key={anotacao.id} 
+                    className="p-3 mb-2 bg-white border rounded shadow-sm hover:shadow-md transition"
+                  >
+                    <p className="text-gray-800">{anotacao.titulo}</p>
+                    <span className="text-xs text-gray-500 block mt-1">
+                      {new Date(anotacao.createdAt).toLocaleDateString("pt-BR")}
+                    </span>
+
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
         </aside>
       </main>
     </div>
