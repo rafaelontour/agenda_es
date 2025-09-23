@@ -11,8 +11,8 @@ pipeline {
         stage('Build & Deploy') {
             steps {
                 sh '''
-                    # Remove o container se existir, mantendo volumes
-                    docker rm -f mysql_container || true
+                    echo "Parando e removendo containers antigos (mantendo volumes)..."
+                    docker-compose down --remove-orphans
 
                     echo "Subindo containers com Docker Compose"
                     docker-compose up -d --build
