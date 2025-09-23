@@ -30,10 +30,12 @@ export default function AdicionarContato(props: Props) {
         if (resposta !== 200) {
             toast.error('Não foi possível salvar o contato')
             return
-        }
+        } 
 
-        toast.success('Contato salvo com sucesso!')
+        console.log("adiciou contato, resposta: ", resposta)
+
         props.setOpenDialog(false)
+        toast.success('Contato salvo com sucesso!')
         props.buscarContatos()
     }
 

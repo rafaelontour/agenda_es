@@ -71,7 +71,7 @@ function LayoutInterno({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2 text-white">
             <Mail size={18} className="opacity-80" />
             <span className="font-medium">
-              {usuario ? (
+              {usuario?.email ? (
                 <p>{usuario.email}</p>
               ) : (
                 <LoaderIcon size={18} className="animate-spin" />
@@ -82,7 +82,7 @@ function LayoutInterno({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2 text-white">
             <Phone size={18} className="opacity-80" />
             <span className="font-medium">
-              {usuario ? (
+              {usuario?.telefone ? (
                 <p>{usuario.telefone}</p>
               ) : (
                 <LoaderIcon size={18} className="animate-spin" />
