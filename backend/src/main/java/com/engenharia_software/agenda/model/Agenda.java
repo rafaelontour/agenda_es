@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.engenharia_software.agenda.Factory.TipoAgenda;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -35,6 +36,9 @@ public abstract class Agenda {
 
     @OneToMany(mappedBy = "agenda")
     private List<Contato> contatos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "agenda", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Anotacao> anotacoes = new ArrayList<>();
     
     public abstract void adicionarContato(Contato contato);
     public abstract Contato getContato(String telefone);

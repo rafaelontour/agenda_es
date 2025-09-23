@@ -26,22 +26,27 @@ export default function Home() {
   createdAt: string;
 }
 
+  const { usuario } = useUsuario();
+
+
   const [anotacoes, setAnotacoes] = useState<{id: string, titulo: string, conteudo: string,createdAt: string}[]>([]);
   
   async function carregarAnotacoes() {
-    const lista = await listarAnotacoesService();
+    if (!usuario?.idAgenda) return;
+    const lista = await listarAnotacoesService(usuario.idAgenda);
     setAnotacoes(lista);
   }
   
   useEffect(() => {
+    if (usuario?.idAgenda) {
+      carregarAnotacoes();
+    }
     
-    carregarAnotacoes();
-  }, []);
+  }, [usuario]);
   
   
   const router = useRouter();
 
-  const { usuario } = useUsuario();
 
   async function buscarContatos() {
     setLoading(true);
@@ -64,6 +69,8 @@ export default function Home() {
   }, [usuario]);
 
   async function handleSalvarAnotacao() {
+    if (!usuario?.idAgenda) return;
+
     const resposta = await salvarAnotacaoService(usuario?.idAgenda, titulo, anotacao);
     if (resposta !== 201) {
       toast.error('Não foi possível salvar a anotação');
@@ -73,6 +80,7 @@ export default function Home() {
     toast.success('Anotação salva!');
     setTitulo("");
     setAnotacao("");
+    carregarAnotacoes();
   }
 
   return (
@@ -188,9 +196,9 @@ export default function Home() {
                   >
                     <p className="text-gray-800">{anotacao.titulo}</p>
                     <span className="text-xs text-gray-500 block mt-1">
-                      {new Date(anotacao.createdAt).toLocaleDateString("pt-BR")}
+                      {anotacao.conteudo}
                     </span>
-
+                    
                   </div>
                 ))
               )}

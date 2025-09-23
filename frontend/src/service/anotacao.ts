@@ -1,6 +1,9 @@
 
 
 async function salvarAnotacaoService(idAgenda: string | undefined, titulo: string, conteudo: string): Promise<number | undefined> {
+    if (!idAgenda) {
+        return undefined;
+    }
     try {
         const resposta = await fetch(`http://localhost:8081/minha_agenda/anotacoes`, {
             method: 'POST',
@@ -8,7 +11,7 @@ async function salvarAnotacaoService(idAgenda: string | undefined, titulo: strin
                 'Content-Type': 'application/json'
             },
             credentials: 'include',
-            body: JSON.stringify({ titulo, conteudo })
+            body: JSON.stringify({ titulo, conteudo, agendaId: idAgenda })
         });
         if (!resposta.ok) {
             return undefined;
@@ -20,24 +23,27 @@ async function salvarAnotacaoService(idAgenda: string | undefined, titulo: strin
 }
 
 
-async function listarAnotacoesService() {
-  try {
-    const resposta = await fetch('http://localhost:8081/minha_agenda/anotacoes', {
-      method: 'GET',
-      credentials: 'include', // envia cookies de sessão (JSESSIONID)
-    });
-
-    if (!resposta.ok) {
-      console.error("Erro ao buscar anotações. Status:", resposta.status);
-      return [];
+async function listarAnotacoesService(idAgenda: string | undefined) {
+    if (!idAgenda) {
+        return [];
     }
+    try {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/anotacoes?agendaId=${idAgenda}`, {
+        method: 'GET',
+        credentials: 'include', // envia cookies de sessão (JSESSIONID)
+        });
 
-    // Converte a resposta JSON do backend para um array de anotações
-    const dados = await resposta.json();
-    return dados;
-  } catch (erro) {
-    console.error("Erro na requisição de anotações:", erro);
-    return [];
+        if (!resposta.ok) {
+        console.error("Erro ao buscar anotações. Status:", resposta.status);
+        return [];
+        }
+
+        // Converte a resposta JSON do backend para um array de anotações
+        const dados = await resposta.json();
+        return dados;
+    } catch (erro) {
+        console.error("Erro na requisição de anotações:", erro);
+        return [];
   }
 }
 
