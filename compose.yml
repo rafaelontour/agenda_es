@@ -1,46 +1,56 @@
-version: "3.9" # Versão do formato do arquivo docker-compose (3.9 é uma das mais atuais e estáveis)
+version: "3.9"  # Versão do formato do arquivo docker-compose
 
-services: # Aqui começam os serviços que serão criados (cada serviço é um container)
+services:  # Aqui começam os serviços que serão criados (cada serviço é um container)
 
-  mysql: # Serviço do banco de dados MySQL
-    image: mysql:8.0 # Usa a imagem oficial do MySQL versão 8.0
-    container_name: mysql_container # Nome fixo do container (facilita para identificar)
-    restart: always # Faz o container reiniciar automaticamente se cair
-    environment: # Variáveis de ambiente necessárias para o MySQL
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # Senha do usuário root (vem do .env)
-      MYSQL_DATABASE: ${MYSQL_DATABASE} # Cria automaticamente um banco com esse nome
-      MYSQL_USER: ${MYSQL_USER} # Usuário padrão do banco
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD} # Senha do usuário padrão
+  mysql:  # Serviço do banco de dados MySQL
+    image: mysql:8.0  # Usa a imagem oficial do MySQL versão 8.0
+    container_name: mysql_container  # Nome fixo do container
+    restart: always  # Reinicia automaticamente se o container cair
+    environment:  # Variáveis de ambiente para configuração do MySQL
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # Senha do usuário root (do .env)
+      MYSQL_DATABASE: ${MYSQL_DATABASE}  # Nome do banco que será criado
+      MYSQL_USER: ${MYSQL_USER}  # Usuário padrão do banco
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}  # Senha do usuário padrão
     ports:
-      - "${MYSQL_PORT}:3306" # Mapeia a porta do host para a porta padrão do MySQL (3306)
+      - "${MYSQL_PORT}:3306"  # Mapeia a porta do host para o container
     volumes:
-      - ./mysql_data:/var/lib/mysql # Persiste os dados do banco no diretório ./mysql_data
+      - ./mysql_data:/var/lib/mysql  # Persiste os dados do MySQL fora do container
+    healthcheck:  # Checa se o MySQL está pronto antes de outros serviços dependentes
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  phpmyadmin: # Serviço do phpMyAdmin (interface web para gerenciar o MySQL)
-    image: phpmyadmin/phpmyadmin:latest # Usa a imagem oficial mais recente do phpMyAdmin
-    container_name: phpmyadmin_container # Nome fixo para o container
-    restart: always # Reinicia automaticamente se cair
-    environment: # Variáveis de ambiente para se conectar ao MySQL
-      PMA_HOST: mysql # Nome do serviço MySQL (docker-compose resolve o DNS)
-      PMA_USER: ${MYSQL_USER} # Usuário que será usado para logar
-      PMA_PASSWORD: ${MYSQL_PASSWORD} # Senha desse usuário
+  phpmyadmin:  # Serviço para gerenciar o MySQL via web
+    image: phpmyadmin/phpmyadmin:latest  # Usa a imagem oficial mais recente
+    container_name: phpmyadmin_container
+    restart: always
+    environment:  # Configuração para se conectar ao MySQL
+      PMA_HOST: mysql  # Nome do serviço MySQL (docker-compose resolve DNS)
+      PMA_USER: ${MYSQL_USER}  # Usuário do banco
+      PMA_PASSWORD: ${MYSQL_PASSWORD}  # Senha do usuário
     ports:
-      - "8080:80" # Acessível em http://localhost:8080 → redireciona para porta 80 do container
-    depends_on:
-      - mysql # Só inicia o phpMyAdmin depois que o MySQL estiver no ar
+      - "8080:80"  # Acessível via http://localhost:8080
+    depends_on:  # Só sobe depois que o MySQL estiver iniciado
+      - mysql
 
-  backend: # Serviço do backend (Spring Boot)
-    build: ./backend # Faz o build usando o Dockerfile que está dentro da pasta ./backend
-    container_name: backend_container # Nome fixo para o container do backend
+  backend:  # Serviço do backend (Spring Boot)
+    build: ./backend  # Faz build usando o Dockerfile dentro de ./backend
+    container_name: backend_container
     ports:
-      - "8081:8081" # Expõe a porta 8081 do container → 8081 do host (já configurado no application.properties)
-    depends_on:
-      - mysql # Backend só sobe depois do banco MySQL estar rodando
+      - "8081:8081"  # Porta do container mapeada para o host
+    depends_on:  # Backend depende do MySQL estar saudável
+      mysql:
+        condition: service_healthy
+    environment:  # Variáveis para o Spring Boot conectar no MySQL
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
 
-  frontend: # Serviço do frontend (Next.js)
-    build: ./frontend # Faz o build usando o Dockerfile que está dentro da pasta ./frontend
-    container_name: frontend_container # Nome fixo para o container do frontend
+  frontend:  # Serviço do frontend (Next.js)
+    build: ./frontend  # Faz build usando o Dockerfile dentro de ./frontend
+    container_name: frontend_container
     ports:
-      - "3000:3000" # Expõe a porta 3000 do container → 3000 do host (onde o Next ficará disponível)
-    depends_on:
-      - backend # Frontend só sobe depois do backend estar rodando
+      - "3000:3000"  # Porta do Next.js
+    depends_on:  # Frontend sobe apenas depois do backend
+      - backend
