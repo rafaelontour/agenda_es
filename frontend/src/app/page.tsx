@@ -4,7 +4,7 @@ import { Toaster } from "sonner";
 import CriarAgenda from "../components/agenda/CriarAgenda";
 import EntrarAgenda from "../components/agenda/EntrarAgenda";
 
-export default function Inicio({ children }: { children: React.ReactNode }) {
+export default function Inicio() {
 
   return (
     <div>
