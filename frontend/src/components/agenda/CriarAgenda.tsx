@@ -34,7 +34,7 @@ export default function CriarAgenda() {
 
         const respostaUsuario = await criarUsuarioService(nome, email, telefone, idAgenda?.toString() , tipoAgenda, senha)
 
-        console.log("usuarioooooo: ", respostaUsuario)
+        console.log("usuario: ", respostaUsuario)
 
         if (respostaUsuario != null) {
             usuario!.id = respostaUsuario.id

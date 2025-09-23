@@ -7,7 +7,9 @@ export interface UsuarioContextoProps {
     usuario: Usuario | null
 }
 
-export const UsuarioContexto = createContext<UsuarioContextoProps | undefined>(undefined);
+export const UsuarioContexto = createContext<UsuarioContextoProps | undefined>({
+    usuario: {} as Usuario
+});
 
 export const UsuarioContextoProvider = ({ children }: { children: React.ReactNode}) => {
 
