@@ -71,12 +71,8 @@ function LayoutInterno({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2 text-white">
             <Mail size={18} className="opacity-80" />
             <span className="font-medium">
-              {usuario !== null ? (
-                usuario.email ? (
-                  <p>{usuario.email}</p>
-                ) : (
-                  <p className="bg-red-400 px-2 py-1 rounded-md">Erro ao buscar email no servidor</p>
-                )
+              {usuario ? (
+                <p>{usuario.email}</p>
               ) : (
                 <LoaderIcon size={18} className="animate-spin" />
               )}
@@ -86,12 +82,8 @@ function LayoutInterno({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2 text-white">
             <Phone size={18} className="opacity-80" />
             <span className="font-medium">
-              {usuario !== null ? (
-                usuario.telefone ? (
-                  <p>{usuario.telefone}</p>
-                ) : (
-                  <p className="bg-red-400 px-2 py-1 rounded-md">Erro ao buscar telefone no servidor</p>
-                )
+              {usuario ? (
+                <p>{usuario.telefone}</p>
               ) : (
                 <LoaderIcon size={18} className="animate-spin" />
               )}
@@ -104,10 +96,8 @@ function LayoutInterno({ children }: { children: React.ReactNode }) {
             <span className="ml-1">
               {loading ? (
                 <LoaderIcon size={18} className="animate-spin" />
-              ) : contatos && contatos.length > 0 ? (
-                <p>{contatos.length}</p>
-              ) : (
-                <p className="bg-red-400 px-2 py-1 rounded-md">Nenhum contato encontrado</p>
+              ) :  (
+                contatos?.length || 0
               )}
             </span>
           </div>
