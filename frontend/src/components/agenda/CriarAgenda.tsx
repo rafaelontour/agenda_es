@@ -36,6 +36,8 @@ export default function CriarAgenda() {
 
         console.log("usuario: ", respostaUsuario)
 
+        console.log("usuario contexto: ", usuario)
+
         if (respostaUsuario != null) {
             usuario!.id = respostaUsuario.id
             usuario!.idAgenda = respostaUsuario.idAgenda

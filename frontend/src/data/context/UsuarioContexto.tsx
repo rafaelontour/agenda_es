@@ -13,7 +13,14 @@ export const UsuarioContexto = createContext<UsuarioContextoProps | undefined>({
 
 export const UsuarioContextoProvider = ({ children }: { children: React.ReactNode}) => {
 
-    const [usuario, setUsuario] = useState<Usuario>({} as Usuario);
+    const [usuario, setUsuario] = useState<Usuario>({
+        id: "",
+        idAgenda: "",
+        nome: "",
+        email: "",
+        telefone: "",
+        tipoAgenda: ""
+    });
 
     async function info() {
         try {
