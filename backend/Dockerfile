@@ -1,9 +1,9 @@
 # Etapa 1: build com cache de dependências
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
 WORKDIR /app
 
 # Copia apenas o pom.xml para cache de dependências
-COPY pom.xml .
+COPY pom.xml ./
 
 # Baixa todas as dependências antes de copiar o código
 RUN mvn dependency:go-offline -B
@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests -B
 
 # Etapa 2: imagem final
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # Copia o jar do build
