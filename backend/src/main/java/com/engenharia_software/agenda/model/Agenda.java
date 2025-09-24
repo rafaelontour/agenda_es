@@ -36,6 +36,9 @@ public abstract class Agenda {
 
     @OneToMany(mappedBy = "agenda", fetch = FetchType.EAGER)
     private List<Contato> contatos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "agenda", fetch = FetchType.EAGER)
+    private List<Anotacao> anotacoes = new ArrayList<>();
     
     public abstract void adicionarContato(Contato contato);
     public abstract Contato getContato(String telefone);

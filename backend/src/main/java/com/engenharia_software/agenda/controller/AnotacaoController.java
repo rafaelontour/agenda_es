@@ -3,7 +3,6 @@ package com.engenharia_software.agenda.controller;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,9 +36,9 @@ public class AnotacaoController {
     }
     
     @GetMapping("/agenda/{idAgenda}")
-     public ResponseEntity<List<Anotacao>> listarAnotacoesPorAgenda(@RequestParam Long idAgenda) {
-        List<Anotacao> anotacoes = anotacaoService.listarAnotacoes(idAgenda);
-        return ResponseEntity.ok(anotacoes);
+     public ResponseEntity<List<AnotacaoDTO>> listarAnotacoesPorAgenda(@PathVariable Long idAgenda) {
+        List<AnotacaoDTO> anotacoes = anotacaoService.listarAnotacoes(idAgenda);
+        return ResponseEntity.status(HttpStatus.OK).body(anotacoes);
     }
 
     @DeleteMapping("/{id}")

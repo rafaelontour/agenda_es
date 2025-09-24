@@ -34,8 +34,9 @@ public class AnotacaoService {
         return anotacaoRepository.save(anotacao);
     }
 
-    public List<Anotacao> listarAnotacoes(Long agendaId) {
-         return anotacaoRepository.findByAgendaId(agendaId);
+    public List<AnotacaoDTO> listarAnotacoes(Long agendaId) {
+        List<Anotacao> anotacoes = anotacaoRepository.findByAgendaId(agendaId);
+        return anotacoes.stream().map(anotacao -> new AnotacaoDTO(anotacao)).toList();
     }
 
     public void deletarAnotacao(UUID id) {
