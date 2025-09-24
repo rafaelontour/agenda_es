@@ -1,14 +1,19 @@
 package com.engenharia_software.agenda.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.engenharia_software.agenda.DTO.AnotacaoDTO;
@@ -23,18 +28,28 @@ public class AnotacaoController {
     private AnotacaoService anotacaoService;
 
     @PostMapping
-    public ResponseEntity<AnotacaoDTO> criarAnotacao(@RequestBody AnotacaoDTO anotacao) {
-        AnotacaoDTO novaAnotacao = anotacaoService.criarAnotacao(anotacao);
-        if (novaAnotacao == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            
-        }
-        return ResponseEntity.status(201).body(novaAnotacao);
+    public ResponseEntity<Anotacao> criarAnotacao(@RequestBody AnotacaoDTO dto) {
+        Anotacao anotacao = anotacaoService.criarAnotacao(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(anotacao);
     }
-
+    
     @GetMapping
-    public List<Anotacao> listarAnotacoes() {
-        return anotacaoService.listarAnotacoes();
+     public ResponseEntity<List<Anotacao>> listarAnotacoesPorAgenda(@RequestParam Long agendaId) {
+        List<Anotacao> anotacoes = anotacaoService.listarAnotacoes(agendaId);
+        return ResponseEntity.ok(anotacoes);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarAnotacao(@PathVariable UUID id) {
+        anotacaoService.deletarAnotacao(id);
+        return ResponseEntity.noContent().build(); 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Anotacao> atualizarAnotacao(
+        @PathVariable UUID id,
+        @RequestBody AnotacaoDTO dto) {
+    Anotacao anotacaoAtualizada = anotacaoService.atualizarAnotacao(id, dto);
+    return ResponseEntity.ok(anotacaoAtualizada);
+}
 }

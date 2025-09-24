@@ -19,7 +19,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             // definindo quem pode acessar o quê
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login", "/auth/me", "/auth/logout", "/agenda", "/usuario", "/minha_agenda/**", "/uploads/**").permitAll()  // acesso público
+                .requestMatchers("/auth/login", "/auth/me", "/auth/logout", "/agenda", "/usuario", "/minha_agenda/**", "/uploads/**", "/h2-console/**").permitAll()  // acesso público
                 .anyRequest().authenticated()  // resto precisa estar logado
             )
             .cors(cors -> cors.configurationSource(request -> {

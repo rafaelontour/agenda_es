@@ -1,0 +1,134 @@
+@startuml
+' =======================================================
+' RF1 – Adicionar Contato
+' =======================================================
+actor Usuario
+participant "Interface" as UI
+participant "Agenda" as Agenda
+participant "Contato" as Contato
+
+== RF1 - Adicionar Contato ==
+Usuario -> UI : solicitarAdicionarContato()
+UI -> Usuario : solicitarDadosContato()
+Usuario -> UI : enviarDadosContato(nome, telefone)
+UI -> Contato : new Contato(nome, telefone)
+UI -> Agenda : adicionarContato(contato)
+Agenda -> Agenda : armazenarContato()
+Agenda --> UI : confirmarAdicao()
+UI --> Usuario : mostrarMensagemSucesso()
+@enduml
+
+@startuml
+' =======================================================
+' RF2 – Localizar Contato
+' =======================================================
+actor Usuario
+participant "Interface" as UI
+participant "Agenda" as Agenda
+participant "Contato" as Contato
+
+== RF2 - Localizar Contato ==
+Usuario -> UI : solicitarLocalizarContato()
+UI -> Usuario : solicitarTelefoneContato()
+Usuario -> UI : enviarTelefone(telefone)
+UI -> Agenda : localizarContato(telefone)
+Agenda -> Contato : retornarContato()
+Agenda --> UI : contatoEncontrado()
+UI --> Usuario : mostrarContato()
+@enduml
+
+@startuml
+' =======================================================
+' RF3 – Remover Contato
+' =======================================================
+actor Usuario
+participant "Interface" as UI
+participant "Agenda" as Agenda
+
+== RF3 - Remover Contato ==
+Usuario -> UI : solicitarRemoverContato()
+UI -> Usuario : solicitarTelefoneContato()
+Usuario -> UI : enviarTelefone(telefone)
+UI -> Agenda : removerContato(telefone)
+Agenda -> Agenda : excluirContato()
+Agenda --> UI : confirmarRemocao()
+UI --> Usuario : mostrarMensagemSucesso()
+@enduml
+
+@startuml
+' =======================================================
+' RF4 – Listar Contatos
+' =======================================================
+actor Usuario
+participant "Interface" as UI
+participant "Agenda" as Agenda
+participant "Contato" as Contato
+
+== RF4 - Listar Contatos ==
+Usuario -> UI : solicitarListarContatos()
+UI -> Agenda : listarContatos()
+Agenda -> Contato : recuperarLista()
+Agenda --> UI : listaContatos
+UI --> Usuario : mostrarListaContatos()
+@enduml
+
+@startuml
+' =======================================================
+' RF5 – Adicionar Anotação
+' =======================================================
+actor Usuario
+participant "Interface" as UI
+participant "Agenda" as Agenda
+participant "Anotacao" as Anotacao
+
+== RF5 - Adicionar Anotação ==
+Usuario -> UI : solicitarAdicionarAnotacao()
+UI -> Usuario : solicitarDadosAnotacao()
+Usuario -> UI : enviarDadosAnotacao(titulo, texto)
+UI -> Anotacao : new Anotacao(titulo, texto)
+UI -> Agenda : adicionarAnotacao(anotacao)
+Agenda -> Agenda : armazenarAnotacao()
+Agenda --> UI : confirmarAdicao()
+UI --> Usuario : mostrarMensagemSucesso()
+@enduml
+
+@startuml
+' =======================================================
+' RF6 – Remover Anotação
+' =======================================================
+actor Usuario
+participant "Interface" as UI
+participant "Agenda" as Agenda
+
+== RF6 - Remover Anotação ==
+Usuario -> UI : solicitarRemoverAnotacao()
+UI -> Usuario : solicitarIdAnotacao()
+Usuario -> UI : enviarIdAnotacao(id)
+UI -> Agenda : removerAnotacao(id)
+Agenda -> Agenda : excluirAnotacao()
+Agenda --> UI : confirmarRemocao()
+UI --> Usuario : mostrarMensagemSucesso()
+@enduml
+
+@startuml
+' =======================================================
+' RF7 – Editar Anotação
+' =======================================================
+actor Usuario
+participant "Interface" as UI
+participant "Agenda" as Agenda
+participant "Anotacao" as Anotacao
+
+== RF7 - Editar Anotação ==
+Usuario -> UI : solicitarEditarAnotacao()
+UI -> Usuario : solicitarIdAnotacao()
+Usuario -> UI : enviarIdAnotacao(id)
+UI -> Agenda : localizarAnotacao(id)
+Agenda -> Anotacao : retornarAnotacao()
+UI -> Usuario : solicitarNovosDados(titulo, texto)
+Usuario -> UI : enviarNovosDados()
+UI -> Agenda : editarAnotacao(id, novosDados)
+Agenda -> Agenda : atualizarAnotacao()
+Agenda --> UI : confirmarEdicao()
+UI --> Usuario : mostrarMensagemSucesso()
+@enduml

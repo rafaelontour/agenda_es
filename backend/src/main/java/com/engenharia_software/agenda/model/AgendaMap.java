@@ -15,31 +15,36 @@ public class AgendaMap extends Agenda {
 
     @Override
     public void adicionarContato(Contato contato) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'adicionarContato'");
+        if(contatos.containsKey(contato.getTelefone())){
+            throw new IllegalArgumentException("Telefone ja cadastrado");
+        }
+        contatos.put(contato.getTelefone(), contato);
     }
 
     @Override
     public Contato atualizarContato(Contato contato) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'atualizarContato'");
+        if(!contatos.containsKey(contato.getTelefone())){
+           throw new IllegalArgumentException("Nao foi encontrado o contato " + contato.getTelefone() + " para atualizar");
+    
+        }
+        contatos.put(contato.getTelefone(), contato);
+        return contato;
+
     }
 
     @Override
     public boolean removerContato(Contato contato) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removerContato'");
+        return contatos.remove(contato.getTelefone())!=null;
+
     }
 
     @Override
     public Collection<Contato> getListaAgenda() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getListaAgenda'");
+        return contatos.values();
     }
 
     @Override
     public Contato getContato(String telefone) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getContato'");
+        return contatos.get(telefone);
     }
 }

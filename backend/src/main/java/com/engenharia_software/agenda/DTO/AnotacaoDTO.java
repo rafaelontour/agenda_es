@@ -1,15 +1,14 @@
 package com.engenharia_software.agenda.DTO;
 
-import lombok.AllArgsConstructor;
+import java.util.UUID;
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class AnotacaoDTO {
-    private Long id;
+    private String titulo;
     private String conteudo;
+    private Long agendaId;
 }
