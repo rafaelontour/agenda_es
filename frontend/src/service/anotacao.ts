@@ -47,6 +47,40 @@ async function listarAnotacoesService(idAgenda: string | undefined) {
   }
 }
 
+async function atualizarAnotacaoService(
+    id: string,
+    titulo: string,
+    conteudo: string
+    ) {
+    try {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/anotacoes/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ titulo, conteudo, agendaId: undefined }) // agendaId não precisa para atualizar
+        });
+
+        if (!resposta.ok) return undefined;
+        return resposta.json();
+    } catch (erro) {
+        console.error('Erro ao atualizar anotação:', erro);
+        return undefined;
+    }
+}
 
 
-export { salvarAnotacaoService, listarAnotacoesService };
+async function deletarAnotacaoService(id: string): Promise<boolean> {
+    try {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/anotacoes/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+        });
+        return resposta.ok;
+    } catch (erro) {
+        console.error('Erro ao deletar anotação:', erro);
+        return false;
+    }
+    }
+
+
+export { salvarAnotacaoService, listarAnotacoesService, atualizarAnotacaoService, deletarAnotacaoService };

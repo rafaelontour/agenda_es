@@ -1,6 +1,7 @@
 package com.engenharia_software.agenda.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,16 @@ public class AnotacaoService {
          return anotacaoRepository.findByAgendaId(agendaId);
     }
 
+    public void deletarAnotacao(UUID id) {
+        anotacaoRepository.deleteById(id);
+    }
+
+    public Anotacao atualizarAnotacao(UUID id, AnotacaoDTO dto) {
+        Anotacao anotacao = anotacaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Anotação não encontrada"));
+        anotacao.setTitulo(dto.getTitulo());
+        anotacao.setConteudo(dto.getConteudo());
+        return anotacaoRepository.save(anotacao);
+    }
 
 }

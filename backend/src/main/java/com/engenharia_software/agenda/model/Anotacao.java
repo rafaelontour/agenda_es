@@ -1,6 +1,9 @@
 package com.engenharia_software.agenda.model;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,12 +26,13 @@ public class Anotacao {
     private UUID id;
     private String titulo;
     private String conteudo;
-    
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
     @ManyToOne
     @JoinColumn(name = "agenda_id", nullable = false)
     private Agenda agenda;
 
-    public Anotacao() {
-
-    }
+    public Anotacao() {}
 }
