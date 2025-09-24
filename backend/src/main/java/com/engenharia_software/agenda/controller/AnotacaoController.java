@@ -24,8 +24,11 @@ import com.engenharia_software.agenda.service.AnotacaoService;
 @RequestMapping("/minha_agenda/anotacoes")
 public class AnotacaoController {
 
-    @Autowired
-    private AnotacaoService anotacaoService;
+    private final AnotacaoService anotacaoService;
+
+    public AnotacaoController(AnotacaoService anotacaoService) {
+        this.anotacaoService = anotacaoService;
+    }
 
     @PostMapping
     public ResponseEntity<Anotacao> criarAnotacao(@RequestBody AnotacaoDTO dto) {
@@ -33,9 +36,9 @@ public class AnotacaoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(anotacao);
     }
     
-    @GetMapping
-     public ResponseEntity<List<Anotacao>> listarAnotacoesPorAgenda(@RequestParam Long agendaId) {
-        List<Anotacao> anotacoes = anotacaoService.listarAnotacoes(agendaId);
+    @GetMapping("/agenda/{idAgenda}")
+     public ResponseEntity<List<Anotacao>> listarAnotacoesPorAgenda(@RequestParam Long idAgenda) {
+        List<Anotacao> anotacoes = anotacaoService.listarAnotacoes(idAgenda);
         return ResponseEntity.ok(anotacoes);
     }
 

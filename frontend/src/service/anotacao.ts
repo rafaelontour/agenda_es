@@ -27,8 +27,9 @@ async function listarAnotacoesService(idAgenda: string | undefined) {
     if (!idAgenda) {
         return [];
     }
+    console.log("ID da agenda para listar anotações:", idAgenda);
     try {
-        const resposta = await fetch(`http://localhost:8081/minha_agenda/anotacoes?agendaId=${idAgenda}`, {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/anotacoes/agenda/${idAgenda}`, {
         method: 'GET',
         credentials: 'include', // envia cookies de sessão (JSESSIONID)
         });

@@ -1,134 +1,147 @@
-@startuml
 ' =======================================================
 ' RF1 – Adicionar Contato
 ' =======================================================
+@startuml
 actor Usuario
-participant "Interface" as UI
+participant "ContatoController" as CC
+participant "ContatoService" as CS
+participant "AgendaRepository" as AR
+participant "ContatoRepository" as CR
 participant "Agenda" as Agenda
 participant "Contato" as Contato
 
-== RF1 - Adicionar Contato ==
-Usuario -> UI : solicitarAdicionarContato()
-UI -> Usuario : solicitarDadosContato()
-Usuario -> UI : enviarDadosContato(nome, telefone)
-UI -> Contato : new Contato(nome, telefone)
-UI -> Agenda : adicionarContato(contato)
-Agenda -> Agenda : armazenarContato()
-Agenda --> UI : confirmarAdicao()
-UI --> Usuario : mostrarMensagemSucesso()
+== RF1 – Adicionar Contato ==
+Usuario -> CC : POST /contatos (ContatoDTO)
+CC -> CS : adicionarContato(contatoDTO)
+CS -> AR : findById(idAgenda)
+AR --> CS : Agenda
+CS -> Contato : new Contato()
+CS -> CR : save(contato)
+CR --> CS : Contato salvo
+CS --> CC : ContatoDTO criado
+CC --> Usuario : HTTP 201 (ContatoDTO)
 @enduml
 
+' =======================================================
+' RF2 – Editar Contato
+' =======================================================
 @startuml
-' =======================================================
-' RF2 – Localizar Contato
-' =======================================================
 actor Usuario
-participant "Interface" as UI
-participant "Agenda" as Agenda
+participant "ContatoController" as CC
+participant "ContatoService" as CS
+participant "ContatoRepository" as CR
 participant "Contato" as Contato
 
-== RF2 - Localizar Contato ==
-Usuario -> UI : solicitarLocalizarContato()
-UI -> Usuario : solicitarTelefoneContato()
-Usuario -> UI : enviarTelefone(telefone)
-UI -> Agenda : localizarContato(telefone)
-Agenda -> Contato : retornarContato()
-Agenda --> UI : contatoEncontrado()
-UI --> Usuario : mostrarContato()
+== RF2 – Editar Contato ==
+Usuario -> CC : PUT /contatos/{id} (ContatoDTO)
+CC -> CS : atualizarContato(contatoDTO, id)
+CS -> CR : findById(id)
+CR --> CS : Contato existente
+CS -> Contato : setNome(), setTelefone()
+CS -> CR : save(contatoAtualizado)
+CR --> CS : Contato atualizado
+CS --> CC : ContatoDTO atualizado
+CC --> Usuario : HTTP 200 (ContatoDTO)
 @enduml
 
-@startuml
 ' =======================================================
 ' RF3 – Remover Contato
 ' =======================================================
+@startuml
 actor Usuario
-participant "Interface" as UI
-participant "Agenda" as Agenda
+participant "ContatoController" as CC
+participant "ContatoService" as CS
+participant "ContatoRepository" as CR
 
-== RF3 - Remover Contato ==
-Usuario -> UI : solicitarRemoverContato()
-UI -> Usuario : solicitarTelefoneContato()
-Usuario -> UI : enviarTelefone(telefone)
-UI -> Agenda : removerContato(telefone)
-Agenda -> Agenda : excluirContato()
-Agenda --> UI : confirmarRemocao()
-UI --> Usuario : mostrarMensagemSucesso()
+== RF3 – Remover Contato ==
+Usuario -> CC : DELETE /contatos/{id}
+CC -> CS : removerContato(id)
+CS -> CR : existsById(id)
+CR --> CS : true/false
+CS -> CR : deleteById(id)
+CS --> CC : boolean removido
+CC --> Usuario : HTTP 204 (No Content) ou 404
 @enduml
 
-@startuml
 ' =======================================================
 ' RF4 – Listar Contatos
 ' =======================================================
+@startuml
 actor Usuario
-participant "Interface" as UI
-participant "Agenda" as Agenda
+participant "ContatoController" as CC
+participant "ContatoService" as CS
+participant "ContatoRepository" as CR
 participant "Contato" as Contato
 
-== RF4 - Listar Contatos ==
-Usuario -> UI : solicitarListarContatos()
-UI -> Agenda : listarContatos()
-Agenda -> Contato : recuperarLista()
-Agenda --> UI : listaContatos
-UI --> Usuario : mostrarListaContatos()
+== RF4 – Listar Contatos ==
+Usuario -> CC : GET /agenda/{idAgenda}/contatos
+CC -> CS : listarContato(idAgenda)
+CS -> CR : findByAgendaId(idAgenda)
+CR --> CS : List<Contato>
+CS -> CS : mapear para List<ContatoDTO>
+CS --> CC : List<ContatoDTO>
+CC --> Usuario : HTTP 200 (List<ContatoDTO>)
 @enduml
 
-@startuml
 ' =======================================================
 ' RF5 – Adicionar Anotação
 ' =======================================================
+@startuml
 actor Usuario
-participant "Interface" as UI
+participant "AnotacaoController" as AC
+participant "AnotacaoService" as AS
+participant "AgendaRepository" as AR
+participant "AnotacaoRepository" as AnR
 participant "Agenda" as Agenda
 participant "Anotacao" as Anotacao
 
-== RF5 - Adicionar Anotação ==
-Usuario -> UI : solicitarAdicionarAnotacao()
-UI -> Usuario : solicitarDadosAnotacao()
-Usuario -> UI : enviarDadosAnotacao(titulo, texto)
-UI -> Anotacao : new Anotacao(titulo, texto)
-UI -> Agenda : adicionarAnotacao(anotacao)
-Agenda -> Agenda : armazenarAnotacao()
-Agenda --> UI : confirmarAdicao()
-UI --> Usuario : mostrarMensagemSucesso()
+== RF5 – Adicionar Anotação ==
+Usuario -> AC : POST /anotacoes (AnotacaoDTO)
+AC -> AS : criarAnotacao(dto)
+AS -> AR : findById(dto.agendaId)
+AR --> AS : Agenda
+AS -> Anotacao : new Anotacao()
+AS -> AnR : save(anotacao)
+AnR --> AS : Anotacao salva
+AS --> AC : Anotacao
+AC --> Usuario : HTTP 201 (Anotacao)
 @enduml
 
-@startuml
 ' =======================================================
 ' RF6 – Remover Anotação
 ' =======================================================
+@startuml
 actor Usuario
-participant "Interface" as UI
-participant "Agenda" as Agenda
+participant "AnotacaoController" as AC
+participant "AnotacaoService" as AS
+participant "AnotacaoRepository" as AnR
 
-== RF6 - Remover Anotação ==
-Usuario -> UI : solicitarRemoverAnotacao()
-UI -> Usuario : solicitarIdAnotacao()
-Usuario -> UI : enviarIdAnotacao(id)
-UI -> Agenda : removerAnotacao(id)
-Agenda -> Agenda : excluirAnotacao()
-Agenda --> UI : confirmarRemocao()
-UI --> Usuario : mostrarMensagemSucesso()
+== RF6 – Remover Anotação ==
+Usuario -> AC : DELETE /anotacoes/{id}
+AC -> AS : deletarAnotacao(id)
+AS -> AnR : deleteById(id)
+AS --> AC : void
+AC --> Usuario : HTTP 204 (No Content)
 @enduml
 
-@startuml
 ' =======================================================
 ' RF7 – Editar Anotação
 ' =======================================================
+@startuml
 actor Usuario
-participant "Interface" as UI
-participant "Agenda" as Agenda
+participant "AnotacaoController" as AC
+participant "AnotacaoService" as AS
+participant "AnotacaoRepository" as AnR
 participant "Anotacao" as Anotacao
 
-== RF7 - Editar Anotação ==
-Usuario -> UI : solicitarEditarAnotacao()
-UI -> Usuario : solicitarIdAnotacao()
-Usuario -> UI : enviarIdAnotacao(id)
-UI -> Agenda : localizarAnotacao(id)
-Agenda -> Anotacao : retornarAnotacao()
-UI -> Usuario : solicitarNovosDados(titulo, texto)
-Usuario -> UI : enviarNovosDados()
-UI -> Agenda : editarAnotacao(id, novosDados)
-Agenda -> Agenda : atualizarAnotacao()
-Agenda --> UI : confirmarEdicao()
-UI --> Usuario : mostrarMensagemSucesso()
+== RF7 – Editar Anotação ==
+Usuario -> AC : PUT /anotacoes/{id} (AnotacaoDTO)
+AC -> AS : atualizarAnotacao(id, dto)
+AS -> AnR : findById(id)
+AnR --> AS : Anotacao existente
+AS -> Anotacao : setTitulo(), setConteudo()
+AS -> AnR : save(anotacaoAtualizado)
+AnR --> AS : Anotacao atualizada
+AS --> AC : Anotacao
+AC --> Usuario : HTTP 200 (Anotacao)
 @enduml
