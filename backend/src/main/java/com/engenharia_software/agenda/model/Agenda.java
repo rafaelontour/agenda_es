@@ -45,4 +45,6 @@ public abstract class Agenda {
     public abstract Contato atualizarContato(Contato contato);
     public abstract boolean removerContato(Contato contato);
     public abstract Collection<Contato> getListaAgenda();
+    public abstract boolean removerContatosListados();
+    public abstract Contato localizarContato(Contato contato);
 }

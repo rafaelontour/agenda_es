@@ -47,4 +47,16 @@ public class AgendaMap extends Agenda {
     public Contato getContato(String telefone) {
         return contatos.get(telefone);
     }
+
+    @Override
+    public boolean removerContatosListados() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerContatosListados'");
+    }
+
+    @Override
+    public Contato localizarContato(Contato contato) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'localizarContato'");
+    }
 }

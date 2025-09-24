@@ -210,14 +210,15 @@ export default function Home() {
           />
 
           <textarea
-            className="w-full h-32 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full min-h-36 flex-1 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
             placeholder="Digite sua anotação aqui..."
             value={anotacao}
             onChange={e => setAnotacao(e.target.value)}
           />
+
           <div className="flex gap-2">
             <button
-              className="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg font-semibold transition-all"
+              className="bg-indigo-700 hover:cursor-pointer hover:bg-indigo-800 text-white px-4 py-2 rounded-lg font-semibold transition-all"
               onClick={handleSalvarAnotacao}
               disabled={!titulo || !anotacao}
             >
@@ -225,7 +226,7 @@ export default function Home() {
             </button>
             {modoEdicao && (
               <button
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg font-semibold transition-all"
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 hover:cursor-pointer px-4 py-2 rounded-lg font-semibold transition-all"
                 onClick={handleCancelarEdicao}
               >
                 Cancelar
@@ -233,9 +234,9 @@ export default function Home() {
             )}
           </div>
 
-          <div className="mt-4 h-full">
+          <div className="mt-4 flex flex-col h-screen relative">
             <h3 className="text-lg font-semibold text-indigo-800 mb-2">Minhas Anotações</h3>
-            <div className="flex flex-col gap-4 overflow-y-auto border rounded-lg p-3 bg-gray-50">
+            <div className="flex flex-1 flex-col max-h-[35vh] gap-4 overflow-y-auto border rounded-lg p-3 bg-gray-50">
               {anotacoes.length === 0 ? (
                 <p className="text-gray-500 text-center">Nenhuma anotação encontrada.</p>
               ) : (
@@ -250,7 +251,7 @@ export default function Home() {
                         <DialogTrigger asChild>
                           <Button
                             variant="outline"
-                            className="text-gray-700 text-sm flex items-center gap-1"
+                            className="text-gray-700 text-sm flex items-center gap-1 hover:cursor-pointer"
                             onClick={() => abrirModalAnotacao(item)}
                           >
                             Ver
@@ -268,22 +269,19 @@ export default function Home() {
                       </Dialog>
                       <Button
                         variant="outline"
-                        className="text-indigo-700 text-sm flex items-center gap-1"
+                        className="text-indigo-700 text-sm flex items-center gap-1 hover:cursor-pointer"
                         onClick={() => handleEditarAnotacao(item)}
                       >
                         Editar
                       </Button>
                       <Button
                         variant="outline"
-                        className="text-red-600 text-sm flex items-center gap-1"
+                        className="text-red-600 text-sm flex items-center gap-1 hover:cursor-pointer"
                         onClick={() => handleDeletarAnotacao(item.id)}
                       >
                         Deletar
                       </Button>
                     </div>
-                    <span className="text-xs text-gray-500 mt-1">
-                      {new Date(item.createdAt).toLocaleDateString("pt-BR")}
-                    </span>
                   </div>
                 ))
               )}

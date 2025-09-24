@@ -90,9 +90,61 @@ async function excluirContatoService(id: string | undefined): Promise<number | u
     }
 }
 
+async function buscarContatosPorIdsService(ids: number[]): Promise<Contato[] | undefined> {
+    if (ids.length === 0) {
+        return [];
+    }
+
+    try {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/contatos/filtrar/${ids}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(ids)
+        })
+
+        if (!resposta.ok) {
+            return;
+        }
+
+        return await resposta.json();
+    } catch (e) {
+        return;
+    }
+}
+
+async function deletarContatosPorIdsService(ids: number[]): Promise<number | undefined> {
+    if (ids.length === 0) {
+        return 204; // No Content
+    }    
+
+    try {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/contatos/deletar/ids`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(ids)
+        })
+
+        if (!resposta.ok) {
+            return;
+        }
+
+        return resposta.status;
+    } catch (e) {
+        return;
+    }
+}
+
 export {
     getContatosService,
     salvarContatoService,
     atualizarContatoService,
-    excluirContatoService
+    excluirContatoService,
+    buscarContatosPorIdsService,
+    deletarContatosPorIdsService
 }

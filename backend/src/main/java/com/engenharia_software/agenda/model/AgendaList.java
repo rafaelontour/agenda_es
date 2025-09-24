@@ -64,4 +64,17 @@ public class AgendaList extends Agenda {
         }
         throw new IllegalArgumentException("Nao foi encontrado o contato " + telefone);
     }
+
+    @Override
+    public boolean removerContatosListados() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerContatosListados'");
+    }
+
+    @Override
+    public Contato localizarContato(Contato contato) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'localizarContato'");
+    }
+
 }

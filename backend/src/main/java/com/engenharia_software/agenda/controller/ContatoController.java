@@ -61,4 +61,21 @@ public class ContatoController {
         return null;
     }
 
+    @GetMapping("/filtrar/{string}")
+    public ResponseEntity<List<ContatoDTO>> filtrarContatos(@PathVariable String string) {
+        List<ContatoDTO> contatosFiltrados = cs.filtrarContatos(string);
+        return ResponseEntity.status(HttpStatus.OK).body(contatosFiltrados);
+    }
+
+    @DeleteMapping("/deletar/ids")
+    public ResponseEntity<String> removerContatos(@RequestBody List<Long> ids) {
+        boolean removido = cs.removerContatosListados(ids);
+        if (removido) {
+            return ResponseEntity.ok("Contatos removidos com sucesso.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body("Nenhum contato encontrado para os IDs fornecidos.");
+        }
+    }
+
 }

@@ -86,6 +86,30 @@ public class ContatoService {
     public void Contato(ContatoDTO contato) {
 
     }
+
+    public List<ContatoDTO> filtrarContatos(String string) {
+        List<Contato> contatos = cr.findByNomeContainingIgnoreCaseOrTelefoneContainingIgnoreCase(string, string);
+        
+        if (contatos.isEmpty()) {
+            return List.of(); // evita retornar null
+        }
+
+        // mapear os dados do Contato para o DTO
+        List<ContatoDTO> contatosDTO = contatos.stream()
+            .map(contato -> new ContatoDTO(contato))
+            .toList();
+
+        return contatosDTO;
+    }
     
+    @Transactional
+    public boolean removerContatosListados(List<Long> ids) {
+        List<Contato> contatosParaRemover = cr.findAllById(ids);
+        if (contatosParaRemover.isEmpty()) {
+            return false; // Nenhum contato encontrado para os IDs fornecidos
+        }
+        cr.deleteAll(contatosParaRemover);
+        return true;
+    }
     
 }
