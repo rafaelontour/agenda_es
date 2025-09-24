@@ -197,7 +197,7 @@ export default function Home() {
         </section>
 
         {/* Anotações */}
-        <aside className="xl:w-[35%] bg-amber-300 rounded-xl shadow-lg p-8 flex flex-col gap-4 h-[85vh]">
+        <aside className="xl:w-[35%] rounded-xl shadow-lg p-8 flex flex-col gap-4 h-[85vh]">
           <h2 className="text-xl font-semibold text-indigo-900 mb-2">Anotações da Agenda</h2>
           <label htmlFor="titulo">Título:</label>
           <input
