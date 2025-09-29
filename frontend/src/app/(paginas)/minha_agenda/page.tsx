@@ -1,8 +1,8 @@
 'use client'
 
 import { Contato } from "@/core/contato";
-import { getContatosService } from "@/service/contato";
-import { Edit, Trash, UserPlus, View } from "lucide-react";
+import { buscarContatosPorIdsService, deletarContatosPorIdsService, getContatosService } from "@/service/contato";
+import { Edit, LogOut, Search, Trash, TrashIcon, UserPlus, View } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import CartaoContato from "../../../components/contato/CartaoContato";
@@ -25,6 +25,9 @@ export default function Home() {
   const [modalAberto, setModalAberto] = useState(false);
   const [anotacaoModal, setAnotacaoModal] = useState<{titulo: string, conteudo: string} | null>(null);
 
+  const [resultadoBusca, setResultadoBusca] = useState<Contato[]>([]);
+  const [busca, setBusca] = useState("");
+
   const router = useRouter();
   const { usuario } = useUsuario();
 
@@ -40,6 +43,45 @@ export default function Home() {
 
     setContatos(resposta);
     setLoading(false);
+  }
+
+  async function buscarContatosPorNome(valorBusca: string) {
+    if (!usuario?.idAgenda || !busca.trim()){
+
+      buscarContatos();
+      return;
+    }
+
+    try {
+      const resposta = await buscarContatosPorIdsService(valorBusca);
+   
+      if (!resposta) {
+        toast.error('Não foi possível buscar os contatos');
+        return;
+      }
+
+      setContatos(resposta); 
+    } catch (error) {
+      toast.error('Erro ao buscar contatos');
+    }
+  }
+
+  async function deletarTodosContatosMostrados() {
+    if (contatos.length === 0) {
+      toast.error("Nenhum contato para deletar.");
+      return;
+    }
+
+    const ids = contatos.map(c => Number(c.id));
+    const resposta = await deletarContatosPorIdsService(ids);
+
+    if (resposta === 200) {
+      toast.success("Contatos deletados com sucesso!");
+      buscarContatos();
+    } else {
+      toast.error("Erro ao deletar contatos.");
+    }
+
   }
 
   async function carregarAnotacoes() {
@@ -145,8 +187,9 @@ export default function Home() {
             logout()
             router.push('/')
           }}
-          className="hover:cursor-pointer"
+          className="bg-indigo-500 hover:cursor-pointer"
         >
+          <LogOut/>
           Sair
         </Button>
       </div>
@@ -170,6 +213,41 @@ export default function Home() {
               }
               buscarContatos={buscarContatos}
             />
+          </div>
+
+          <div className="mb-4 gap-2 flex flex-col">
+           
+            <input 
+              type="text"
+              placeholder="Buscar contato..."
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-300" 
+              value={busca}
+              onChange={async e => {
+                const valor = e.target.value;
+                setBusca(valor);
+                
+                if (!valor.trim()) {
+                  // Se o campo estiver vazio, mostra todos os contatos
+                  await buscarContatos();
+                } else {
+                  // Caso contrário, faz a busca pelo texto digitado
+                  await buscarContatosPorNome(valor);
+                }
+                
+              }}
+              
+            />
+
+            <button
+              className="mt-2 border bg-red-500 w-fit text-white border-gray-300 px-4 py-2 rounded-lg font-semibold transition-all text-start cursor-pointer"
+              onClick={deletarTodosContatosMostrados}
+            >
+            
+              Apagar todos os contatos mostrados abaixo
+              <TrashIcon className="inline-block ml-2 " size={16} />
+            </button>
+              
+
           </div>
           <div className={`grid gap-6 ${contatos.length === 0 ? "justify-center" : "md:grid-cols-2 xl:grid-cols-3"}`}>
             {loading ? (

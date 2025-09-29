@@ -74,7 +74,7 @@ function LayoutInterno({ children }: { children: React.ReactNode }) {
         {/* Usuário */}
         <div className="flex flex-col items-center mb-4">
           <div>
-            <div title={`${usuario?.imagemUrl == "" ? "Foto de perfil" : "Alterar foto de perfil"}`} className="relative group hover:cursor-pointer h-28 w-28 rounded-full hover:bg-gray-600/30 bg-white shadow-lg flex items-center justify-center mb-2 overflow-hidden border-4 border-indigo-300">
+            <div title={`${usuario?.imagemUrl == "" ? "Foto de perfil" : "Alterar foto de perfil"}`} className="relative group hover:cursor-pointer h-48 w-48 rounded-full hover:bg-gray-600/30 bg-white shadow-lg flex items-center justify-center mb-2 overflow-hidden border-4 border-indigo-300">
               {
                 usuario?.imagemUrl ? (
                   <img
@@ -83,7 +83,7 @@ function LayoutInterno({ children }: { children: React.ReactNode }) {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <User size={56} className="text-indigo-400" />
+                  <User size={80} className="text-indigo-400" />
                 )
               }
               <div className="hidden absolute group-hover:block rounded-full w-fit h-fit">
@@ -121,7 +121,7 @@ function LayoutInterno({ children }: { children: React.ReactNode }) {
             </div>
 
           </div>
-          <span className="text-white font-semibold">{usuario?.nome || "Usuário"}</span>
+          <span className="text-white text-3xl font-semibold">{usuario?.nome || "Usuário"}</span>
         </div>
 
         {/* Contato e email */}

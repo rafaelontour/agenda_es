@@ -22,6 +22,22 @@ export default function TecladoAdicionarContato({ buscarContatos, botaoAdicionar
         setNumero("")
     }
 
+    function adicionarNumeroFormatado(digito: string) {
+    let valor = numero.replace(/\D/g, "") + digito; // junta e remove tudo que não é número
+    if (valor.length <= 2) {
+    valor = `(${valor}`;
+  } else if (valor.length <= 7) {
+    valor = `(${valor.slice(0, 2)}) ${valor.slice(2)}`;
+  } else if (valor.length <= 11) {
+    valor = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7)}`;
+  } else {
+    valor = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7, 11)}`;
+  }
+
+  setNumero(valor);
+}
+
+
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog} >
             <DialogTrigger asChild>
@@ -52,11 +68,29 @@ export default function TecladoAdicionarContato({ buscarContatos, botaoAdicionar
                 </DialogHeader>
 
                 <div className="relative">
+                   
                     <input
                         className="border-2 border-gray-300 rounded-md h-11 w-full px-5"
-                        type="number"
+                        type="tel"
                         value={numero}
-                        onChange={(e) => setNumero(e.target.value)}
+                        onChange={(e) => {
+                            let valor = e.target.value.replace(/\D/g, ""); // remove tudo que não é número
+                            if (valor.length <= 2) {
+                                // Apenas DDD
+                                valor = `(${valor}`;
+                            } else if (valor.length <= 7) {
+                                // DDD + primeiros dígitos
+                                valor = `(${valor.slice(0, 2)}) ${valor.slice(2)}`;
+                            } else if (valor.length <= 11) {
+                                // DDD + celular completo
+                                valor = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7)}`;
+                            } else {
+                                // Limita a 11 dígitos
+                                valor = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7, 11)}`;
+                            }
+
+                            setNumero(valor);
+                            }}
                     />
                     <button className="absolute top-3 right-4 hover:cursor-pointer bg-white pl-2" onClick={() => setNumero((prev) => prev.slice(0, -1))}>
                         <Delete size={20} />
@@ -71,7 +105,7 @@ export default function TecladoAdicionarContato({ buscarContatos, botaoAdicionar
                         <div
                             key={index}
                             className="flex justify-center items-center text-2xl text-center w-28 h-16 border-2 border-gray-300 rounded-md hover:cursor-pointer active:scale-95"
-                            onClick={() => setNumero((prev) => prev + item)}
+                            onClick={() => adicionarNumeroFormatado(item)}
                         >
                             {item}
                         </div>

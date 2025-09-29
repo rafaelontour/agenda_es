@@ -90,26 +90,23 @@ async function excluirContatoService(id: string | undefined): Promise<number | u
     }
 }
 
-async function buscarContatosPorIdsService(ids: number[]): Promise<Contato[] | undefined> {
-    if (ids.length === 0) {
-        return [];
-    }
-
+async function buscarContatosPorIdsService(busca: string): Promise<Contato[] | undefined> {
     try {
-        const resposta = await fetch(`http://localhost:8081/minha_agenda/contatos/filtrar/${ids}`, {
+        const resposta = await fetch(`http://localhost:8081/minha_agenda/contatos/filtrar/${busca}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
             },
             credentials: "include",
-            body: JSON.stringify(ids)
         })
 
         if (!resposta.ok) {
             return;
         }
 
-        return await resposta.json();
+        const dados: Contato[] = await resposta.json();
+        return dados;
+        
     } catch (e) {
         return;
     }

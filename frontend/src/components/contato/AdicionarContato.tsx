@@ -50,7 +50,7 @@ export default function AdicionarContato(props: Props) {
             <SheetContent>
                 <SheetHeader>
                     <SheetTitle className="text-2xl font-bold">Novo contato</SheetTitle>
-                    <SheetDescription className="text-md">Complete os ddos do novo contato</SheetDescription>
+                    <SheetDescription className="text-md">Complete os dados do novo contato</SheetDescription>
                 </SheetHeader>
 
                 <form className="flex flex-col gap-3 px-4">
@@ -70,9 +70,26 @@ export default function AdicionarContato(props: Props) {
                         <input
                             id="tel"
                             className="border-2 border-gray-300 rounded-md h-11 w-full px-3"
-                            type="number"
-                            defaultValue={props.telefone}
-                            onChange={(e) => props.setTelefone(e.target.value)}
+                            type="tel"
+                            value={props.telefone} // usar value em vez de defaultValue
+                            onChange={(e) => {
+                            let valor = e.target.value.replace(/\D/g, ""); // remove tudo que não é número
+                            if (valor.length <= 2) {
+                                // Apenas DDD
+                                valor = `(${valor}`;
+                            } else if (valor.length <= 7) {
+                                // DDD + primeiros dígitos
+                                valor = `(${valor.slice(0, 2)}) ${valor.slice(2)}`;
+                            } else if (valor.length <= 11) {
+                                // DDD + celular completo
+                                valor = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7)}`;
+                            } else {
+                                // Limita a 11 dígitos
+                                valor = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7, 11)}`;
+                            }
+
+                            props.setTelefone(valor); // atualiza o state com a formatação
+                            }}
                         />
                     </div>
                 </form>
