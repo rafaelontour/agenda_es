@@ -31,8 +31,9 @@ public class SecurityConfig {
                 return corsConfig;
             }))
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) 
-            );
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            )
+            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
         return http.build();
     }
