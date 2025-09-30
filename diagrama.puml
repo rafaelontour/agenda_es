@@ -145,3 +145,23 @@ AnR --> AS : Anotacao atualizada
 AS --> AC : Anotacao
 AC --> Usuario : HTTP 200 (Anotacao)
 @enduml
+
+' =======================================================
+' RF8 – Remover Contatos por IDs
+' =======================================================
+@startuml
+actor Usuario
+participant "ContatoController" as CC
+participant "ContatoService" as CS
+participant "ContatoRepository" as CR
+participant "Contato" as Contato
+
+== RF8 – Remover Contatos por IDs ==
+Usuario -> CC : DELETE /contatos/deletar/ids (List<Long> ids)
+CC -> CS : removerContatosListados(ids)
+CS -> CR : findAllById(ids)
+CR --> CS : List<Contato>
+CS -> CR : deleteAll(contatos)
+CS --> CC : boolean removido
+CC --> Usuario : HTTP 200 (sucesso) ou 404 (nenhum contato encontrado)
+@enduml
