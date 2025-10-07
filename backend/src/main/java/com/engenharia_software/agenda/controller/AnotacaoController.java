@@ -30,8 +30,8 @@ public class AnotacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<Anotacao> criarAnotacao(@RequestBody AnotacaoDTO dto) {
-        Anotacao anotacao = anotacaoService.criarAnotacao(dto);
+    public ResponseEntity<AnotacaoDTO> criarAnotacao(@RequestBody AnotacaoDTO dto) {
+        AnotacaoDTO anotacao = anotacaoService.criarAnotacao(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(anotacao);
     }
     
@@ -42,16 +42,16 @@ public class AnotacaoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAnotacao(@PathVariable UUID id) {
+    public ResponseEntity<?> deletarAnotacao(@PathVariable Long id) {
         anotacaoService.deletarAnotacao(id);
         return ResponseEntity.noContent().build(); 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Anotacao> atualizarAnotacao(
-        @PathVariable UUID id,
+    public ResponseEntity<AnotacaoDTO> atualizarAnotacao(
+        @PathVariable Long id,
         @RequestBody AnotacaoDTO dto) {
-    Anotacao anotacaoAtualizada = anotacaoService.atualizarAnotacao(id, dto);
+    AnotacaoDTO anotacaoAtualizada = anotacaoService.atualizarAnotacao(id, dto);
     return ResponseEntity.ok(anotacaoAtualizada);
 }
 }

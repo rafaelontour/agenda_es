@@ -1,0 +1,151 @@
+@startuml
+title Diagrama de Classes - Controllers, Services e Repositories
+
+' ================================================
+' PACOTE: REPOSITORY
+' ================================================
+interface AgendaRepository {
+    + save(Agenda)
+    + findById(Long)
+    + findAll()
+    + deleteById(Long)
+}
+
+interface AnotacaoRepository {
+    + save(Anotacao)
+    + findById(Long)
+    + findAll()
+    + findByAgendaId(Long)
+    + deleteById(Long)
+}
+
+interface ContatoRepository {
+    + save(Contato)
+    + findById(Long)
+    + findAll()
+    + findByAgendaId(Long)
+    + findByNomeContainingIgnoreCaseOrTelefoneContainingIgnoreCase(String, String)
+    + deleteById(Long)
+}
+
+interface UsuarioRepository {
+    + save(Usuario)
+    + findById(Long)
+    + findAll()
+    + findByNome(String)
+    + findByTelefone(String)
+    + deleteById(Long)
+}
+
+' ================================================
+' PACOTE: SERVICE
+' ================================================
+class AgendaService {
+    - AgendaRepository ar
+    + criarAgenda(TipoAgenda tipo)
+}
+
+class ContatoService {
+    - ContatoRepository cr
+    - AgendaRepository ar
+    + listarContato(Long idAgenda)
+    + adicionarContato(ContatoDTO)
+    + atualizarContato(ContatoDTO, Long id)
+    + removerContato(Long id)
+    + filtrarContatos(String)
+    + removerContatosListados(List<Long>)
+}
+
+class AnotacaoService {
+    - AnotacaoRepository ar
+    + listarAnotacoes(Long agendaId)
+    + criarAnotacao(AnotacaoDTO)
+    + atualizarAnotacao(Long id, AnotacaoDTO)
+    + deletarAnotacao(Long id)
+}
+
+class UsuarioService {
+    - UsuarioRepository ur
+    - AgendaRepository ar
+    + criarUsuario(UsuarioDTO)
+}
+
+class AuthService {
+    - UsuarioRepository usuarioRepository
+    - PasswordEncoder passwordEncoder
+    + login(LoginDTO, HttpServletRequest)
+}
+
+' ================================================
+' PACOTE: CONTROLLER
+' ================================================
+class AgendaController {
+    - AgendaService as
+    + criarAgenda(String tipo)
+}
+
+class ContatoController {
+    - ContatoService cs
+    + listarContatos(Long idAgenda)
+    + adicionarContato(ContatoDTO)
+    + atualizarContato(ContatoDTO, Long id)
+    + removerContato(Long id)
+    + filtrarContatos(String)
+    + removerContatos(List<Long>)
+}
+
+class AnotacaoController {
+    - AnotacaoService anotacaoService
+    + listarAnotacoesPorAgenda(Long idAgenda)
+    + criarAnotacao(AnotacaoDTO)
+    + atualizarAnotacao(Long id, AnotacaoDTO)
+    + deletarAnotacao(Long id)
+}
+
+class UsuarioController {
+    - UsuarioService us
+    + criarUsuario(UsuarioDTO)
+}
+
+class AuthController {
+    - AuthService as
+    + login(LoginDTO, HttpServletRequest)
+    + logout(HttpServletRequest, HttpServletResponse)
+    + me(HttpServletRequest)
+}
+
+class UploadController {
+    - UsuarioRepository ur
+    + getImage(String diretorio)
+    + uploadImage(MultipartFile, HttpSession)
+}
+
+class DebugController {
+    + me(Authentication)
+}
+
+class TesteController {
+    + publico()
+    + user()
+    + admin()
+}
+
+' ================================================
+' RELACIONAMENTOS ENTRE CAMADAS
+' ================================================
+AgendaController --> AgendaService
+ContatoController --> ContatoService
+AnotacaoController --> AnotacaoService
+UsuarioController --> UsuarioService
+AuthController --> AuthService
+UploadController --> UsuarioRepository
+
+AgendaService --> AgendaRepository
+ContatoService --> ContatoRepository
+ContatoService --> AgendaRepository
+AnotacaoService --> AnotacaoRepository
+UsuarioService --> UsuarioRepository
+UsuarioService --> AgendaRepository
+AuthService --> UsuarioRepository
+
+@enduml

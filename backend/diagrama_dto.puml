@@ -1,0 +1,145 @@
+@startuml
+title Diagrama de Classes - DTOs (Agenda)
+
+' =====================================================
+' ENUM
+' =====================================================
+enum TipoAgenda {
+    LIST
+    MAP
+}
+
+' =====================================================
+' ENTIDADES DO MODELO
+' =====================================================
+abstract class Agenda {
+    - Long id
+    - TipoAgenda tipo
+    - List<Contato> contatos
+    - List<Anotacao> anotacoes
+
+    + void adicionarContato(Contato contato)
+    + Contato getContato(String telefone)
+    + Contato atualizarContato(Contato contato)
+    + boolean removerContato(Contato contato)
+    + Collection<Contato> getListaAgenda()
+    + boolean removerContatosListados()
+    + Contato localizarContato(Contato contato)
+}
+
+class AgendaList {
+    - List<Contato> contatos
+}
+
+class AgendaMap {
+    - Map<String, Contato> contatos
+}
+
+class Contato {
+    - Long id
+    - Agenda agenda
+    - String nome
+    - String telefone
+    - String email
+}
+
+class Anotacao {
+    - Long id
+    - String titulo
+    - String conteudo
+    - LocalDateTime createdAt
+    - Agenda agenda
+}
+
+class Usuario {
+    - Long id
+    - Agenda agenda
+    - String nome
+    - String email
+    - String telefone
+    - String imagemUrl
+    - String senha
+}
+
+' =====================================================
+' CLASSES DTO
+' =====================================================
+class AgendaDTO {
+    - Long id
+    - TipoAgenda tipo
+    - List<Contato> contatos
+}
+
+class AgendaListDTO {
+    - List<IContato> listaContato
+}
+
+class AgendaMapDTO {
+    - Map<String, IContato> agenda
+}
+
+class AnotacaoDTO {
+    - String titulo
+    - String conteudo
+    - Long agendaId
+}
+
+class ContatoDTO {
+    - Long id
+    - Long idAgenda
+    - String nome
+    - String telefone
+}
+
+class LoginDTO {
+    - Long id
+    - String telefone
+    - String senha
+    - String imagemUrl
+}
+
+class TipoDTO {
+    - String tipo
+}
+
+class UsuarioDTO {
+    - Long id
+    - Long idAgenda
+    - String nome
+    - String email
+    - String telefone
+    - TipoAgenda tipoAgenda
+    - String senha
+    - String imagemUrl
+}
+
+' =====================================================
+' INTERFACE
+' =====================================================
+interface IContato
+
+' =====================================================
+' RELACIONAMENTOS ENTRE MODELOS
+' =====================================================
+Agenda <|-- AgendaList
+Agenda <|-- AgendaMap
+Agenda "1" o-- "0..*" Contato : contém >
+Agenda "1" o-- "0..*" Anotacao : possui >
+Usuario "1"--"1" Agenda : possui >
+Agenda --> TipoAgenda
+
+Contato "*"--"1" Agenda
+Anotacao "*"--"1" Agenda
+
+' =====================================================
+' RELACIONAMENTOS ENTRE DTOs E MODELOS
+' =====================================================
+AgendaDTO --> TipoAgenda
+AgendaDTO --> Contato
+AgendaListDTO --> IContato
+AgendaMapDTO --> IContato
+AnotacaoDTO --> Anotacao
+ContatoDTO --> Contato
+UsuarioDTO --> TipoAgenda
+
+@enduml

@@ -1,0 +1,94 @@
+@startuml
+title Diagrama de Classes - Agenda
+
+' --------------------------------------------------
+' ENUMS
+' --------------------------------------------------
+enum TipoAgenda {
+    LIST
+    MAP
+}
+
+' --------------------------------------------------
+' CLASSES
+' --------------------------------------------------
+abstract class Agenda {
+    - Long id
+    - TipoAgenda tipo
+    - List<Contato> contatos
+    - List<Anotacao> anotacoes
+
+    + void adicionarContato(Contato contato)
+    + Contato getContato(String telefone)
+    + Contato atualizarContato(Contato contato)
+    + boolean removerContato(Contato contato)
+    + Collection<Contato> getListaAgenda()
+    + boolean removerContatosListados()
+    + Contato localizarContato(Contato contato)
+}
+
+class AgendaList {
+    - List<Contato> contatos
+    + void adicionarContato(Contato contato)
+    + Contato atualizarContato(Contato contato)
+    + boolean removerContato(Contato contato)
+    + Collection<Contato> getListaAgenda()
+    + Contato getContato(String telefone)
+    + boolean removerContatosListados()
+    + Contato localizarContato(Contato contato)
+}
+
+class AgendaMap {
+    - Map<String, Contato> contatos
+    + void adicionarContato(Contato contato)
+    + Contato atualizarContato(Contato contato)
+    + boolean removerContato(Contato contato)
+    + Collection<Contato> getListaAgenda()
+    + Contato getContato(String telefone)
+    + boolean removerContatosListados()
+    + Contato localizarContato(Contato contato)
+}
+
+class Contato {
+    - Long id
+    - Agenda agenda
+    - String nome
+    - String telefone
+    - String email
+}
+
+class Anotacao {
+    - Long id
+    - String titulo
+    - String conteudo
+    - LocalDateTime createdAt
+    - Agenda agenda
+}
+
+class Usuario {
+    - Long id
+    - Agenda agenda
+    - String nome
+    - String email
+    - String telefone
+    - String imagemUrl
+    - String senha
+}
+
+' --------------------------------------------------
+' RELACIONAMENTOS
+' --------------------------------------------------
+Agenda <|-- AgendaList
+Agenda <|-- AgendaMap
+
+Agenda "1" o-- "0..*" Contato : contém >
+Agenda "1" o-- "0..*" Anotacao : possui >
+
+Contato "*"--"1" Agenda : pertence >
+Anotacao "*"--"1" Agenda : pertence >
+
+Usuario "1"--"1" Agenda : possui >
+
+Agenda --> TipoAgenda : usa >
+
+@enduml

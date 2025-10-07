@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Anotacao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
     private String titulo;
     private String conteudo;
 

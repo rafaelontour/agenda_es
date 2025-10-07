@@ -22,7 +22,7 @@ public class AnotacaoService {
     @Autowired
     private AgendaRepository agendaRepository;
 
-    public Anotacao criarAnotacao(AnotacaoDTO dto) {
+    public AnotacaoDTO criarAnotacao(AnotacaoDTO dto) {
         Agenda agenda = agendaRepository.findById(dto.getAgendaId())
                           .orElseThrow(() -> new RuntimeException("Agenda não encontrada"));
 
@@ -31,7 +31,10 @@ public class AnotacaoService {
         anotacao.setConteudo(dto.getConteudo());
         anotacao.setAgenda(agenda);
 
-        return anotacaoRepository.save(anotacao);
+        Anotacao salva = anotacaoRepository.save(anotacao);
+        AnotacaoDTO anotacaoDTO = new AnotacaoDTO(salva);
+
+        return anotacaoDTO;
     }
 
     public List<AnotacaoDTO> listarAnotacoes(Long agendaId) {
@@ -39,16 +42,20 @@ public class AnotacaoService {
         return anotacoes.stream().map(anotacao -> new AnotacaoDTO(anotacao)).toList();
     }
 
-    public void deletarAnotacao(UUID id) {
+    public void deletarAnotacao(Long id) {
         anotacaoRepository.deleteById(id);
     }
 
-    public Anotacao atualizarAnotacao(UUID id, AnotacaoDTO dto) {
+    public AnotacaoDTO atualizarAnotacao(Long id, AnotacaoDTO dto) {
         Anotacao anotacao = anotacaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Anotação não encontrada"));
         anotacao.setTitulo(dto.getTitulo());
         anotacao.setConteudo(dto.getConteudo());
-        return anotacaoRepository.save(anotacao);
+
+        Anotacao salva =anotacaoRepository.save(anotacao);
+        AnotacaoDTO anotacaoDTO = new AnotacaoDTO(salva);
+
+        return anotacaoDTO;
     }
 
 }
